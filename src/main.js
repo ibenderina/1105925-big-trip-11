@@ -1,12 +1,12 @@
 import {createCostInfoTemplate} from "./components/cost-info.js";
-import {createEditTemplate} from "./components/editing";
-import {createFiltersTemplate} from "./components/filter";
-import {createMenuTemplate} from "./components/menu";
-import {createSortTemplate} from "./components/sorting";
-import {createTripDaysTemplate} from "./components/trip-days";
-import {createTripEventsItemTemplate} from "./components/trip-events-item";
-import {createTripEventsListTemplate} from "./components/trip-events-list";
-import {createTripInfoTemplate} from "./components/trip-info";
+import {createEditTemplate} from "./components/editing.js";
+import {createFiltersTemplate} from "./components/filter.js";
+import {createMenuTemplate} from "./components/menu.js";
+import {createSortTemplate} from "./components/sorting.js";
+import {createTripDaysTemplate} from "./components/trip-days.js";
+import {createTripEventsItemTemplate} from "./components/trip-events-item.js";
+import {createTripEventsListTemplate} from "./components/trip-events-list.js";
+import {createTripInfoTemplate} from "./components/trip-info.js";
 
 const TRIP_COUNT = 3;
 
