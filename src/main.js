@@ -1,5 +1,5 @@
 import {createCostInfoTemplate} from "./components/cost-info.js";
-import {createEditTemplate} from "./components/editing.js";
+import {createEditTemplate, capitalize} from "./components/editing.js";
 import {createFiltersTemplate} from "./components/filter.js";
 import {createMenuTemplate} from "./components/menu.js";
 import {createSortTemplate} from "./components/sorting.js";
@@ -7,8 +7,9 @@ import {createTripDaysTemplate} from "./components/trip-days.js";
 import {createTripEventsItemTemplate} from "./components/trip-events-item.js";
 import {createTripEventsListTemplate} from "./components/trip-events-list.js";
 import {createTripInfoTemplate} from "./components/trip-info.js";
+import {getTripData} from "./mock/trip.js";
 
-const TRIP_COUNT = 3;
+const trips = getTripData();
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -27,7 +28,7 @@ render(tripInfo, createCostInfoTemplate());
 render(mainMenuHeader, createMenuTemplate(), `beforebegin`);
 render(mainMenuElement, createFiltersTemplate());
 render(tripEvents, createSortTemplate());
-render(tripEvents, createEditTemplate());
+render(tripEvents, createEditTemplate(trips[0]));
 render(tripEvents, createTripDaysTemplate());
 
 const tripDaysItem = tripEvents.querySelector(`.trip-days__item`);
@@ -36,6 +37,16 @@ render(tripDaysItem, createTripEventsListTemplate());
 
 const tripEventsList = tripDaysItem.querySelector(`.trip-events__list`);
 
-for (let i = 0; i < TRIP_COUNT; i++) {
-  render(tripEventsList, createTripEventsItemTemplate());
-}
+render(tripEventsList, createTripEventsItemTemplate(trips));
+
+const eventTypeOutput = document.querySelector(`.event__type-output`);
+const eventTypeButton = document.querySelectorAll(`.event__type-input`);
+const eventTypeIcon = document.querySelector(`.event__type-icon`);
+
+eventTypeButton.forEach(function (element) {
+  element.addEventListener(`change`, function (evt) {
+    const input = evt.target;
+    eventTypeOutput.textContent = capitalize(input.value) + ` ` + input.dataset[`type`];
+    eventTypeIcon.src = `img/icons/${input.value}.png`;
+  });
+});
