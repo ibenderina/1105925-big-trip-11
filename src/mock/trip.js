@@ -1,7 +1,48 @@
-export const eventTransferTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
-export const eventActivityTypes = [`Check-in`, `Sightseeing`, `Restaurant`];
+export const transfer = `to`;
+export const activity = `in`;
+export const eventTypes = [
+  {
+    name: `Taxi`,
+    type: transfer
+  },
+  {
+    name: `Bus`,
+    type: transfer
+  },
+  {
+    name: `Train`,
+    type: transfer
+  },
+  {
+    name: `Ship`,
+    type: transfer
+  },
+  {
+    name: `Transport`,
+    type: transfer
+  },
+  {
+    name: `Drive`,
+    type: transfer
+  },
+  {
+    name: `Flight`,
+    type: transfer
+  },
+  {
+    name: `Check-in`,
+    type: activity
+  },
+  {
+    name: `Sightseeing`,
+    type: activity
+  },
+  {
+    name: `Restaurant`,
+    type: activity
+  }
+];
 export const eventCities = [`Gallifrey`, `Mandalor`, `Tatooine`, `Death Star`];
-
 const description = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget.`,
@@ -59,19 +100,34 @@ const getRandomElements = (element, min, max) => {
 };
 
 const createTripDataElement = () => {
+  let date = getRandomDate();
   return {
-    targetTransferType: getRandomArrayItem(eventTransferTypes),
-    targetActivityType: getRandomArrayItem(eventActivityTypes),
+    targetType: getRandomArrayItem(eventTypes),
     destination: getRandomArrayItem(eventCities),
     offers: getRandomElements(offers, 0, 5),
     info: {
       description: getRandomElements(description, 1, 5),
       photos: mockPhotos(getRandomIntegerNumber(1, 5))
     },
+    checkin: date,
+    checkout: new Date(new Date(date).setHours(date.getHours() + 2.5)),
+    price: getRandomIntegerNumber(120, 1400)
   };
 };
-// TODO - еще какие то данные
+
+const getRandomDate = () => {
+  const targetDate = new Date();
+  const sign = Math.random() > 0.5 ? 1 : -1;
+  const diffValue = sign * getRandomIntegerNumber(0, 8);
+
+  targetDate.setDate(targetDate.getDate() + diffValue);
+  targetDate.setHours(targetDate.getHours() + diffValue);
+  targetDate.setMinutes(targetDate.getMinutes() + diffValue);
+  return targetDate;
+};
 
 export const getTripData = () => {
-  return new Array(getRandomIntegerNumber(15, 20)).fill(``).map(createTripDataElement);
+  return new Array(getRandomIntegerNumber(15, 20)).fill(``).map(createTripDataElement).sort((a, b) => {
+    return a.checkin - b.checkin;
+  });
 };

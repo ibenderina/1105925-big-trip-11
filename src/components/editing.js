@@ -1,6 +1,8 @@
-import {eventTransferTypes} from "../mock/trip.js";
-import {eventActivityTypes} from "../mock/trip.js";
+import {eventTypes} from "../mock/trip.js";
 import {eventCities} from "../mock/trip.js";
+import {activity} from "../mock/trip.js";
+import {transfer} from "../mock/trip.js";
+import {getFormattedDate} from "../utils.js";
 
 const createEventType = (index, value, t) => {
   const lowerCase = value.toLowerCase();
@@ -14,44 +16,12 @@ const createEventType = (index, value, t) => {
       <label class="event__type-label  event__type-label--${lowerCase}" for="event-type-${lowerCase}-${index}">${value}</label>
     </div>`;
 };
-
-const createTransfersTypeList = () => {
-  return eventTransferTypes.map((value, index) => {
-    return createEventType(index, value, `to`);
-  }).join(``);
-};
-
-const createActivitiesTypeList = () => {
-  return eventActivityTypes.map((value, index) => {
-    return createEventType(index, value, `in`);
-  }).join(``);
-};
-
-
-export const capitalize = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
 const createEventPhoto = (value) => {
   return `<img class="event__photo" src="${value}" alt="Event photo">`;
 };
-
-const createEventPhotosList = (photos) => {
-  return photos.map((value) => {
-    return createEventPhoto(value);
-  }).join(``);
-};
-
 const createEventDestination = (value) => {
   return `<option value="${value}"></option>`;
 };
-
-const createEventsDestinationList = () => {
-  return eventCities.map((value) => {
-    return createEventDestination(value);
-  }).join(``);
-};
-
 const createOffer = (value, index, price) => {
   const lowerCaseTrim = value.toLowerCase().trim();
   return `<div class="event__offer-selector">
@@ -63,16 +33,36 @@ const createOffer = (value, index, price) => {
             </label>
           </div>`;
 };
+const createDescriptionTemplate = (text) => {
+  return `<p class="event__destination-description">${text}</p>`;
+};
+
+const createEventTypeList = (trip, eventType) => {
+  return eventTypes.map((item, index) => {
+    if (item.type === eventType) {
+      return createEventType(index, item.name, eventType);
+    }
+    return ``;
+  }).join(``);
+};
+
+const createEventPhotosList = (photos) => {
+  return photos.map((value) => {
+    return createEventPhoto(value);
+  }).join(``);
+};
+
+const createEventsDestinationList = () => {
+  return eventCities.map((value) => {
+    return createEventDestination(value);
+  }).join(``);
+};
 
 const createOffers = (offers) => {
   return offers.map((offer, index) => {
     const {name, price} = offer;
     return createOffer(name, index, price);
   }).join(``);
-};
-
-const createDescriptionTemplate = (text) => {
-  return `<p class="event__destination-description">${text}</p>`;
 };
 
 const createDescription = (description) => {
@@ -93,14 +83,14 @@ export const createEditTemplate = (trip) => {
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Transfer</legend>
 
-            ${createTransfersTypeList(trip.targetTransferType)}
+            ${createEventTypeList(trip.targetType, transfer)}
 
           </fieldset>
 
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Activity</legend>
 
-            ${createActivitiesTypeList(trip.targetActivityType)}
+            ${createEventTypeList(trip.targetType, activity)}
 
           </fieldset>
         </div>
@@ -120,12 +110,12 @@ export const createEditTemplate = (trip) => {
         <label class="visually-hidden" for="event-start-time-1">
           From
         </label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 00:00">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormattedDate(`d/m/Y H:i`, trip.checkin)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 00:00">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormattedDate(`d/m/Y H:i`, trip.checkout)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -133,7 +123,7 @@ export const createEditTemplate = (trip) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${trip.price}" min="0">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
