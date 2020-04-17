@@ -5,6 +5,12 @@ const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
+const calcTotalCost = (trips) => {
+  return trips.reduce((sum, trip) => {
+    return sum + trip.price;
+  }, 0);
+};
+
 const getTime = (date) => {
   const minute = `0${date.getMinutes()}`.slice(-2);
   return `${date.getHours()}:${minute}`;
@@ -53,12 +59,4 @@ const createElement = (template) => {
   return newElement.firstElementChild;
 };
 
-const useFlatpickr = () => {
-  flatpickr(`.event__input--time`, {
-    enableTime: true,
-    minDate: `today`,
-    dateFormat: `d/m/Y H:i`,
-  });
-};
-
-export {render, createElement, capitalize, getTime, getDuration, tripDate, getFormattedDate, useFlatpickr};
+export {render, createElement, capitalize, getTime, getDuration, tripDate, getFormattedDate, calcTotalCost};
