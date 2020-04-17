@@ -1,82 +1,4 @@
-export const transfer = `to`;
-export const activity = `in`;
-export const eventTypes = [
-  {
-    name: `Taxi`,
-    type: transfer
-  },
-  {
-    name: `Bus`,
-    type: transfer
-  },
-  {
-    name: `Train`,
-    type: transfer
-  },
-  {
-    name: `Ship`,
-    type: transfer
-  },
-  {
-    name: `Transport`,
-    type: transfer
-  },
-  {
-    name: `Drive`,
-    type: transfer
-  },
-  {
-    name: `Flight`,
-    type: transfer
-  },
-  {
-    name: `Check-in`,
-    type: activity
-  },
-  {
-    name: `Sightseeing`,
-    type: activity
-  },
-  {
-    name: `Restaurant`,
-    type: activity
-  }
-];
-export const eventCities = [`Gallifrey`, `Mandalor`, `Tatooine`, `Death Star`];
-const description = [
-  `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
-  `Cras aliquet varius magna, non porta ligula feugiat eget.`,
-  `Fusce tristique felis at fermentum pharetra.`,
-  `Aliquam id orci ut lectus varius viverra.`,
-  `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
-  `Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.`,
-  `Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.`,
-  `Sed sed nisi sed augue convallis suscipit in sed felis.`,
-  `Aliquam erat volutpat.`,
-  `Nunc fermentum tortor ac porta dapibus.`,
-  `In rutrum ac purus sit amet tempus.`
-];
-const offers = [
-  {
-    name: `Hang out with AC/DC`,
-    price: `100`
-  },
-  {
-    name: `Add an all-day sesh`,
-    price: `20`
-  },
-  {
-    name: `Travel by horse`,
-    price: `140`
-  },
-  {
-    name: `Get a slap`,
-    price: `200`
-  },
-  {
-    name: `Add cute kittens`,
-    price: `45`
-  }];
+import {EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS} from "../consts.js";
 
 const mockPhotos = (count) => {
   return new Array(count).fill(``).map(function () {
@@ -102,11 +24,11 @@ const getRandomElements = (element, min, max) => {
 const createTripDataElement = () => {
   let date = getRandomDate();
   return {
-    targetType: getRandomArrayItem(eventTypes),
-    destination: getRandomArrayItem(eventCities),
-    offers: getRandomElements(offers, 0, 5),
+    targetType: getRandomArrayItem(EVENT_TYPES),
+    destination: getRandomArrayItem(EVENT_CITIES),
+    offers: getRandomElements(OFFERS, 0, 5),
     info: {
-      description: getRandomElements(description, 1, 5),
+      description: getRandomElements(DESCRIPTION, 1, 5),
       photos: mockPhotos(getRandomIntegerNumber(1, 5))
     },
     checkin: date,

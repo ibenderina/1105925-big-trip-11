@@ -1,14 +1,12 @@
-import {createCostInfoTemplate} from "./components/cost-info.js";
-import {createEditTemplate} from "./components/editing.js";
-import {createFiltersTemplate} from "./components/filter.js";
-import {createMenuTemplate} from "./components/menu.js";
-import {createSortTemplate} from "./components/sorting.js";
-import {createTripDaysTemplate} from "./components/trip-days.js";
-import {createTripInfoTemplate} from "./components/trip-info.js";
+import CostComponent from "./components/cost/cost.js";
+import FiltersComponent from "./components/filters/filters.js";
+import MenuComponent from "./components/menu/menu.js";
+import SortComponent from "./components/sort/sort.js";
+import TripDaysComponent from "./components/trip-days/trip-days.js";
+import TripInfoComponent from "./components/trip-info/trip-info.js";
 import {getTripData} from "./mock/trip.js";
-import {render} from "./utils.js";
-import {capitalize} from "./utils.js";
-import flatpickr from "flatpickr";
+import {render, useFlatpickr} from "./utils.js";
+import {RenderPosition} from "./consts.js";
 
 const trips = getTripData();
 
@@ -17,31 +15,14 @@ const mainMenuElement = document.querySelector(`.trip-controls`);
 const mainMenuHeader = mainMenuElement.querySelector(`.trip-controls__header`);
 const tripEvents = document.querySelector(`.trip-events`);
 
-render(tripMain, createTripInfoTemplate(), `afterbegin`);
+render(tripMain, new TripInfoComponent().getElement(), RenderPosition.AFTERBEGIN);
 
 const tripInfo = tripMain.querySelector(`.trip-info`);
 
-render(tripInfo, createCostInfoTemplate());
-render(mainMenuHeader, createMenuTemplate(), `beforebegin`);
-render(mainMenuElement, createFiltersTemplate());
-render(tripEvents, createSortTemplate());
-render(tripEvents, createEditTemplate(trips[0]));
-render(tripEvents, createTripDaysTemplate(trips.slice(1)));
+render(tripInfo, new CostComponent().getElement(), RenderPosition.BEFOREEND);
+render(mainMenuHeader, new MenuComponent().getElement(), RenderPosition.BEFOREBEGIN);
+render(mainMenuElement, new FiltersComponent().getElement(), RenderPosition.BEFOREEND);
+render(tripEvents, new SortComponent().getElement(), RenderPosition.BEFOREEND);
+render(tripEvents, new TripDaysComponent(trips).getElement(), RenderPosition.BEFOREEND);
 
-const eventTypeOutput = document.querySelector(`.event__type-output`);
-const eventTypeButton = document.querySelectorAll(`.event__type-input`);
-const eventTypeIcon = document.querySelector(`.event__type-icon`);
-
-eventTypeButton.forEach(function (element) {
-  element.addEventListener(`change`, function (evt) {
-    const input = evt.target;
-    eventTypeOutput.textContent = capitalize(input.value) + ` ` + input.dataset[`type`];
-    eventTypeIcon.src = `img/icons/${input.value}.png`;
-  });
-});
-
-flatpickr(`.event__input--time`, {
-  enableTime: true,
-  minDate: `today`,
-  dateFormat: `d/m/Y H:i`,
-});
+useFlatpickr();
