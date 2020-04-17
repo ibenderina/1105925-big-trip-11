@@ -1,11 +1,4 @@
-import {createTripEventsItemTemplate} from "../trip-events/trip-events-item-tpl";
 import {getFormattedDate} from "../../utils";
-
-const createEvents = (events) => {
-  return events.map((value) => {
-    return createTripEventsItemTemplate(value);
-  }).join(``);
-};
 
 const createTripDayTemplate = (checkin, index) => {
   const monthName = checkin.toLocaleString(`default`, {month: `short`});
