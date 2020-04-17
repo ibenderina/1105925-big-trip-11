@@ -1,23 +1,16 @@
-const TimeValue = {
-  MIN: 60,
-  HOURS: 60,
-  SEC: 1000
-};
+import {TimeValue} from "./consts.js";
+import flatpickr from "flatpickr";
 
-export const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-export const capitalize = (string) => {
+const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-export const getTime = (date) => {
+const getTime = (date) => {
   const minute = `0${date.getMinutes()}`.slice(-2);
   return `${date.getHours()}:${minute}`;
 };
 
-export const getDuration = (time) => {
+const getDuration = (time) => {
   const start = new Date(time.checkin);
   const end = new Date(time.checkout);
   const durationMinutesAll = (end - start) / (TimeValue.SEC * TimeValue.MIN);
@@ -30,9 +23,9 @@ export const getDuration = (time) => {
   }
 };
 
-export const tripDate = (events) => {
+const tripDate = (events) => {
   return [...new Set(events.map((trip) => {
-    return `${trip.checkin.getFullYear()}-${trip.checkin.getMonth()}-${trip.checkin.getDate()}`;
+    return getFormattedDate(trip.checkin, `Y-m-d`);
   }))];
 };
 
@@ -40,7 +33,7 @@ const addLeadZero = (argument) => {
   return `0${argument}`.slice(-2);
 };
 
-export const getFormattedDate = (format, date) => {
+const getFormattedDate = (date, format) => {
   format = format.replace(`d`, addLeadZero(date.getDate()));
   format = format.replace(`m`, addLeadZero(date.getMonth()));
   format = format.replace(`Y`, date.getFullYear());
@@ -48,3 +41,24 @@ export const getFormattedDate = (format, date) => {
   format = format.replace(`i`, addLeadZero(date.getMinutes()));
   return format;
 };
+
+const render = (container, element, place) => {
+  container.insertAdjacentElement(place, element);
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstElementChild;
+};
+
+const useFlatpickr = () => {
+  flatpickr(`.event__input--time`, {
+    enableTime: true,
+    minDate: `today`,
+    dateFormat: `d/m/Y H:i`,
+  });
+};
+
+export {render, createElement, capitalize, getTime, getDuration, tripDate, getFormattedDate, useFlatpickr};
