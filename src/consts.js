@@ -5,9 +5,13 @@ const RenderPosition = {
   AFTEREND: `afterend`
 };
 const Key = {
-  ESC: `Escape`,
+  ESC: [`Escape`, `Ecs`],
   ENTER: `Enter`
 };
+
+const isEscPressed = (key) => Key.ESC.includes(key);
+const isEnterPressed = (key) => key === Key.ENTER;
+
 const TRANSFER = `to`;
 const ACTIVITY = `in`;
 const EVENT_TYPES = [
@@ -93,4 +97,4 @@ const TimeValue = {
   SEC: 1000
 };
 
-export {RenderPosition, Key, TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, TimeValue};
+export {RenderPosition, Key, TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, TimeValue, isEscPressed, isEnterPressed};

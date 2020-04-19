@@ -21,7 +21,7 @@ if (trips.length === 0) {
   render(tripEvents, noEvent.getElement(), RenderPosition.BEFOREEND);
 } else {
   render(tripEvents, new SortComponent().getElement(), RenderPosition.BEFOREEND);
-  const tripDays = new TripDaysComponent(trips);
+  const tripDays = new TripDaysComponent();
   render(tripEvents, tripDays.getElement(), RenderPosition.BEFOREEND);
 
   const tripController = new TripController(tripDays);

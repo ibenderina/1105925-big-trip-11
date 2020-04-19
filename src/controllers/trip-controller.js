@@ -1,11 +1,11 @@
-import {getFormattedDate, getUniqueTripDates, capitalize} from "../utils/common";
-import {replace} from "../utils/render";
 import DayComponent from "../components/day/day";
 import EventsComponent from "../components/events/events";
 import EventComponent from "../components/event/event";
 import EventsItemComponent from "../components/events-item/events-item";
 import EditComponent from "../components/edit/edit";
-import {Key} from "../consts";
+import {getFormattedDate, getUniqueTripDates, capitalize} from "../utils/common";
+import {replace} from "../utils/render";
+import {isEnterPressed, isEscPressed} from "../consts";
 
 const renderTripDays = (tripDaysElement, trips) => {
   const dates = getUniqueTripDates(trips);
@@ -26,7 +26,7 @@ const renderTripDay = (trips, dayNumber) => {
 const renderEvent = (trip) => {
 
   const onEscKeydown = (evt) => {
-    if (evt.key === Key.ESC) {
+    if (isEscPressed(evt.key)) {
       document.removeEventListener(`keydown`, onEscKeydown);
       replaceTripToEvent();
     }
@@ -42,7 +42,7 @@ const renderEvent = (trip) => {
   };
 
   const onToggleKeydownEnter = (evt) => {
-    if (evt.key === Key.ENTER) {
+    if (isEnterPressed(evt.key)) {
       evt.stopPropagation();
       const eventTypeToggle = evt.target.querySelector(`.event__type-toggle`);
       eventTypeToggle.checked = !eventTypeToggle.checked;
