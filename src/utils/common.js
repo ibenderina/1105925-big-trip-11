@@ -1,5 +1,4 @@
-import {TimeValue} from "./consts.js";
-import flatpickr from "flatpickr";
+import {TimeValue} from "../consts.js";
 
 const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -29,7 +28,7 @@ const getDuration = (time) => {
   }
 };
 
-const tripDate = (events) => {
+const getUniqueTripDates = (events) => {
   return [...new Set(events.map((trip) => {
     return getFormattedDate(trip.checkin, `Y-m-d`);
   }))];
@@ -48,15 +47,4 @@ const getFormattedDate = (date, format) => {
   return format;
 };
 
-const render = (container, element, place) => {
-  container.insertAdjacentElement(place, element);
-};
-
-const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-
-  return newElement.firstElementChild;
-};
-
-export {render, createElement, capitalize, getTime, getDuration, tripDate, getFormattedDate, calcTotalCost};
+export {capitalize, getTime, getDuration, getUniqueTripDates, getFormattedDate, calcTotalCost};

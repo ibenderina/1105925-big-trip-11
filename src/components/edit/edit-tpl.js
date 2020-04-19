@@ -1,5 +1,5 @@
-import {TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES} from "../../consts.js";
-import {getFormattedDate} from "../../utils.js";
+import {TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES} from "../../consts";
+import {getFormattedDate} from "../../utils/common";
 
 const createEventType = (index, value, t) => {
   const lowerCase = value.toLowerCase();

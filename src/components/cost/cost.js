@@ -1,23 +1,13 @@
-import {createElement} from "../../utils";
-import {createCostTemplate} from "./cost-tpl.js";
+import AbstractComponent from "../abstract";
+import {createCostTemplate} from "./cost-tpl";
 
-export default class Cost {
+export default class Cost extends AbstractComponent {
   constructor(cost) {
+    super();
     this._cost = cost;
-    this._element = null;
   }
 
   getTemplate() {
     return createCostTemplate(this._cost);
-  }
-
-  getElement() {
-    this._element = createElement(this.getTemplate());
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
