@@ -1,4 +1,4 @@
-import {getFormattedDate} from "../../utils";
+import {getFormattedDate} from "../../utils/common";
 
 const createTripDayTemplate = (checkin, index) => {
   const monthName = checkin.toLocaleString(`default`, {month: `short`});

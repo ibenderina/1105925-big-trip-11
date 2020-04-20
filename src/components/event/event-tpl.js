@@ -1,4 +1,4 @@
-import {getDuration, getTime} from "../../utils";
+import {getDuration, getTime} from "../../utils/common";
 
 const createOfferBlock = (offer) => {
   return `<li class="event__offer">

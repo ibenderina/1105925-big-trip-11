@@ -1,11 +1,13 @@
-import {calcTotalCost, createElement, render} from "../../utils";
-import {createTripInfoTemplate} from "./trip-info-tpl";
+import AbstractComponent from "../abstract";
 import CostComponent from "../cost/cost";
+import {render} from "../../utils/render";
+import {calcTotalCost} from "../../utils/common";
+import {createTripInfoTemplate} from "./info-tpl";
 import {RenderPosition} from "../../consts";
 
-export default class TripInfo {
+export default class Info extends AbstractComponent {
   constructor(trips) {
-    this._element = null;
+    super();
     this._trips = trips;
   }
 
@@ -15,14 +17,9 @@ export default class TripInfo {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate());
+      super.getElement();
       render(this._element, new CostComponent(calcTotalCost(this._trips)).getElement(), RenderPosition.BEFOREEND);
     }
-
     return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
