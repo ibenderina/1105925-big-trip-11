@@ -96,5 +96,10 @@ const TimeValue = {
   HOURS: 60,
   SEC: 1000
 };
+const SortType = {
+  TIME: `by-time`,
+  PRICE: `by-price`,
+  DEFAULT: `default`
+};
 
-export {RenderPosition, Key, TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, TimeValue, isEscPressed, isEnterPressed};
+export {RenderPosition, Key, TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, TimeValue, isEscPressed, isEnterPressed, SortType};

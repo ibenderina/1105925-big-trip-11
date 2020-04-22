@@ -1,4 +1,4 @@
-import {TimeValue} from "../consts.js";
+import {TimeValue} from "../consts";
 
 const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -23,9 +23,8 @@ const getDuration = (time) => {
   const durationMinutes = durationMinutesAll - durationHours * TimeValue.MIN;
   if (durationMinutes === 0) {
     return `${durationHours}H`;
-  } else {
-    return `${durationHours}H ${durationMinutesAll - durationHours * TimeValue.MIN}MIN`;
   }
+  return `${durationHours}H ${durationMinutesAll - durationHours * TimeValue.MIN}MIN`;
 };
 
 const getUniqueTripDates = (events) => {

@@ -3,11 +3,16 @@ import EventsComponent from "../components/events/events";
 import EventComponent from "../components/event/event";
 import EventsItemComponent from "../components/events-item/events-item";
 import EditComponent from "../components/edit/edit";
+import SortComponent from "../components/sort/sort";
 import {getFormattedDate, getUniqueTripDates, capitalize} from "../utils/common";
-import {replace} from "../utils/render";
-import {isEnterPressed, isEscPressed} from "../consts";
+import {render, replace} from "../utils/render";
+import {isEnterPressed, isEscPressed, RenderPosition, SortType} from "../consts";
+import NoEventsComponent from "../components/no-events/no-events";
 
 const renderTripDays = (tripDaysElement, trips) => {
+  trips = trips.sort((a, b) => {
+    return a.checkin - b.checkin;
+  });
   const dates = getUniqueTripDates(trips);
   return dates.map((date, i) => {
     const sortedTrips = trips.filter((trip) => {
@@ -17,8 +22,12 @@ const renderTripDays = (tripDaysElement, trips) => {
   });
 };
 
+const renderSortedTripDays = (tripDaysElement, trips) => {
+  tripDaysElement.appendChild(renderTripDay(trips, null));
+};
+
 const renderTripDay = (trips, dayNumber) => {
-  const dayComponent = new DayComponent(trips, dayNumber).getElement();
+  const dayComponent = new DayComponent(trips[0].checkin, dayNumber).getElement();
   dayComponent.appendChild(renderEventsComponent(trips));
   return dayComponent;
 };
@@ -89,12 +98,52 @@ const renderEventsComponent = (trips) => {
   return eventsElement;
 };
 
+const getSortedTrips = (trips, sortType) => {
+  let sortedTrips = [];
+
+  switch (sortType) {
+    case SortType.TIME:
+      sortedTrips = trips.sort((a, b) => {
+        return (b.checkout - b.checkin) - (a.checkout - a.checkin);
+      });
+      break;
+    case SortType.PRICE:
+      sortedTrips = trips.sort((a, b) => b.price - a.price);
+      break;
+    case SortType.DEFAULT:
+      sortedTrips = trips;
+      break;
+  }
+
+  return sortedTrips;
+};
+
 export default class TripController {
   constructor(container) {
     this._container = container;
+    this._sortComponent = new SortComponent();
+    this._tripEvents = document.querySelector(`.trip-events`);
+    this._noEvent = new NoEventsComponent();
   }
 
   render(trips) {
+    if (trips.length === 0) {
+      render(this._tripEvents, this._noEvent.getElement(), RenderPosition.BEFOREEND);
+    } else {
+      render(this._tripEvents, this._sortComponent.getElement(), RenderPosition.BEFOREEND);
+      render(this._tripEvents, this._container.getElement(), RenderPosition.BEFOREEND);
+    }
+
     renderTripDays(this._container.getElement(), trips);
+
+    this._sortComponent.setSortTypeChangeHandler((sortType) => {
+      const sortedTrips = getSortedTrips(trips, sortType, 0);
+      this._container.getElement().innerHTML = ``;
+
+      if (sortType === SortType.DEFAULT) {
+        return renderTripDays(this._container.getElement(), sortedTrips);
+      }
+      return renderSortedTripDays(this._container.getElement(), sortedTrips);
+    });
   }
 }
