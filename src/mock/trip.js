@@ -48,8 +48,10 @@ const getRandomDate = () => {
   return targetDate;
 };
 
-export const getTripData = () => {
+const getTripData = () => {
   return new Array(getRandomIntegerNumber(15, 20)).fill(``).map(createTripDataElement).sort((a, b) => {
     return a.checkin - b.checkin;
   });
 };
+
+export {getRandomElements, getTripData, getRandomIntegerNumber, mockPhotos};

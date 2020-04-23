@@ -12,15 +12,11 @@ export default class Sort extends AbstractComponent {
     return createSortTemplate();
   }
 
-  getSortType() {
-    return this._currenSortType;
-  }
-
   setSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
-      if (evt.target.tagName !== `LABEL`) {
+      if (!evt.target.closest(`.trip-sort__btn`)) {
         return;
       }
 

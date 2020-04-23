@@ -1,122 +1,12 @@
 import DayComponent from "../components/day/day";
 import EventsComponent from "../components/events/events";
-import EventComponent from "../components/event/event";
 import EventsItemComponent from "../components/events-item/events-item";
-import EditComponent from "../components/edit/edit";
 import SortComponent from "../components/sort/sort";
-import {getFormattedDate, getUniqueTripDates, capitalize} from "../utils/common";
-import {render, replace} from "../utils/render";
-import {isEnterPressed, isEscPressed, RenderPosition, SortType} from "../consts";
+import {getFormattedDate, getUniqueTripDates} from "../utils/common";
+import {render} from "../utils/render";
+import {RenderPosition, SortType} from "../consts";
 import NoEventsComponent from "../components/no-events/no-events";
-
-const renderTripDays = (tripDaysElement, trips) => {
-  trips = trips.sort((a, b) => {
-    return a.checkin - b.checkin;
-  });
-  const dates = getUniqueTripDates(trips);
-  return dates.map((date, i) => {
-    const sortedTrips = trips.filter((trip) => {
-      return getFormattedDate(trip.checkin, `Y-m-d`) === date;
-    });
-    tripDaysElement.appendChild(renderTripDay(sortedTrips, i));
-  });
-};
-
-const renderSortedTripDays = (tripDaysElement, trips) => {
-  tripDaysElement.appendChild(renderTripDay(trips, null));
-};
-
-const renderTripDay = (trips, dayNumber) => {
-  const dayComponent = new DayComponent(trips[0].checkin, dayNumber).getElement();
-  dayComponent.appendChild(renderEventsComponent(trips));
-  return dayComponent;
-};
-
-const renderEvent = (trip) => {
-
-  const onEscKeydown = (evt) => {
-    if (isEscPressed(evt.key)) {
-      document.removeEventListener(`keydown`, onEscKeydown);
-      replaceTripToEvent();
-    }
-  };
-
-  const replaceTripToEdit = () => {
-    replace(edit, event);
-    document.addEventListener(`keydown`, onEscKeydown);
-  };
-
-  const replaceTripToEvent = () => {
-    replace(event, edit);
-  };
-
-  const onToggleKeydownEnter = (evt) => {
-    if (isEnterPressed(evt.key)) {
-      evt.stopPropagation();
-      const eventTypeToggle = evt.target.querySelector(`.event__type-toggle`);
-      eventTypeToggle.checked = !eventTypeToggle.checked;
-    }
-  };
-
-  const eventTypeChanger = (evt) => {
-    const input = evt.target;
-    const eventType = capitalize(input.value);
-    const vector = input.dataset[`type`];
-    eventTypeOutput.textContent = `${eventType} ${vector}`;
-    eventTypeIcon.src = `img/icons/${input.value}.png`;
-  };
-
-  const eventList = new EventsItemComponent().getElement();
-  const event = new EventComponent(trip);
-  const edit = new EditComponent(trip);
-
-  event.setClickButtonHandler(replaceTripToEdit);
-  edit.setClickButtonHandler(replaceTripToEvent);
-
-  edit.setSubmitHandler((evt) => {
-    evt.preventDefault();
-    replaceTripToEvent();
-    document.removeEventListener(`keydown`, onEscKeydown);
-  });
-
-  edit.setToggleKeydownEnterHandler(onToggleKeydownEnter);
-  edit.setChangeEventTypeHandler(eventTypeChanger);
-
-  const eventTypeOutput = edit.getElement().querySelector(`.event__type-output`);
-  const eventTypeIcon = edit.getElement().querySelector(`.event__type-icon`);
-
-  eventList.appendChild(event.getElement());
-
-  return eventList;
-};
-
-const renderEventsComponent = (trips) => {
-  const eventsElement = new EventsComponent(trips).getElement();
-  trips.forEach((trip) => {
-    eventsElement.appendChild(renderEvent(trip));
-  });
-  return eventsElement;
-};
-
-const getSortedTrips = (trips, sortType) => {
-  let sortedTrips = [];
-
-  switch (sortType) {
-    case SortType.TIME:
-      sortedTrips = trips.sort((a, b) => {
-        return (b.checkout - b.checkin) - (a.checkout - a.checkin);
-      });
-      break;
-    case SortType.PRICE:
-      sortedTrips = trips.sort((a, b) => b.price - a.price);
-      break;
-    case SortType.DEFAULT:
-      sortedTrips = trips;
-      break;
-  }
-
-  return sortedTrips;
-};
+import PointController from "./point-controller";
 
 export default class TripController {
   constructor(container) {
@@ -124,26 +14,113 @@ export default class TripController {
     this._sortComponent = new SortComponent();
     this._tripEvents = document.querySelector(`.trip-events`);
     this._noEvent = new NoEventsComponent();
+    this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
+    this._showedEventComponents = [];
   }
 
   render(trips) {
-    if (trips.length === 0) {
+    this._trips = trips;
+    if (!trips.length) {
       render(this._tripEvents, this._noEvent.getElement(), RenderPosition.BEFOREEND);
     } else {
       render(this._tripEvents, this._sortComponent.getElement(), RenderPosition.BEFOREEND);
       render(this._tripEvents, this._container.getElement(), RenderPosition.BEFOREEND);
     }
 
-    renderTripDays(this._container.getElement(), trips);
+    this._renderTripDays(this._container.getElement(), trips);
 
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
-      const sortedTrips = getSortedTrips(trips, sortType, 0);
+      const sortedTrips = this._getSortedTrips(trips, sortType, 0);
       this._container.getElement().innerHTML = ``;
 
       if (sortType === SortType.DEFAULT) {
-        return renderTripDays(this._container.getElement(), sortedTrips);
+        return this._renderTripDays(this._container.getElement(), sortedTrips);
       }
-      return renderSortedTripDays(this._container.getElement(), sortedTrips);
+      return this._renderSortedTripDays(this._container.getElement(), sortedTrips);
     });
+  }
+
+  _onDataChange(pointController, oldData, newData) {
+    const index = this._trips.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      return;
+    }
+
+    this._trips = [].concat(this._trips.slice(0, index), newData, this._trips.slice(index + 1));
+
+    pointController.render(this._trips[index]);
+  }
+
+  _sortByCheckin(trips) {
+    return trips.sort((a, b) => {
+      return a.checkin - b.checkin;
+    });
+  }
+
+  _sortByDuration(trips) {
+    return trips.sort((a, b) => {
+      return (b.checkout - b.checkin) - (a.checkout - a.checkin);
+    });
+  }
+
+  _sortByPrice(trips) {
+    return trips.sort((a, b) => b.price - a.price);
+  }
+
+  _renderTripDays(tripDaysElement, trips) {
+    trips = this._sortByCheckin(trips);
+    const dates = getUniqueTripDates(trips);
+    return dates.map((date, i) => {
+      const sortedTrips = trips.filter((trip) => {
+        return getFormattedDate(trip.checkin, `Y-m-d`) === date;
+      });
+      tripDaysElement.appendChild(this._renderTripDay(sortedTrips, i));
+    });
+  }
+
+  _renderSortedTripDays(tripDaysElement, trips) {
+    tripDaysElement.appendChild(this._renderTripDay(trips, null));
+  }
+
+  _renderTripDay(trips, dayNumber) {
+    const dayComponent = new DayComponent(trips[0].checkin, dayNumber).getElement();
+    dayComponent.appendChild(this._renderEventsComponent(trips));
+    return dayComponent;
+  }
+
+  _renderEventsComponent(trips) {
+    const eventsElement = new EventsComponent(trips).getElement();
+    trips.forEach((trip) => {
+      const eventList = new EventsItemComponent().getElement();
+      const pointController = new PointController(eventList, this._onDataChange, this._onViewChange);
+      pointController.render(trip);
+      eventsElement.appendChild(eventList);
+      this._showedEventComponents.push(pointController);
+    });
+    return eventsElement;
+  }
+
+  _getSortedTrips(trips, sortType) {
+    let sortedTrips = [];
+
+    switch (sortType) {
+      case SortType.TIME:
+        sortedTrips = this._sortByDuration(trips);
+        break;
+      case SortType.PRICE:
+        sortedTrips = this._sortByPrice(trips);
+        break;
+      case SortType.DEFAULT:
+        sortedTrips = this._sortByCheckin(trips);
+        break;
+    }
+
+    return sortedTrips;
+  }
+
+  _onViewChange() {
+    this._showedEventComponents.forEach((it) => it.setDefaultView());
   }
 }

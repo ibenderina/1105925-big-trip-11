@@ -15,7 +15,7 @@ const createEventTemplate = (trip) => {
 
   return `<div class="event">
             <div class="event__type">
-            <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+            <img class="event__type-icon" width="42" height="42" src="img/icons/${trip.targetType.name}.png" alt="Event type icon">
             </div>
             <h3 class="event__title">${trip.targetType.name} ${trip.targetType.type} ${trip.destination}</h3>
 
