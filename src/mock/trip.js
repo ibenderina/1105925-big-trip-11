@@ -1,4 +1,4 @@
-import {EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS} from "../consts.js";
+import {EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS} from "../consts";
 
 const mockPhotos = (count) => {
   return new Array(count).fill(``).map(function () {
@@ -32,7 +32,7 @@ const createTripDataElement = () => {
       photos: mockPhotos(getRandomIntegerNumber(1, 5))
     },
     checkin: date,
-    checkout: new Date(new Date(date).setHours(date.getHours() + 2.5)),
+    checkout: new Date(new Date(date).setHours(date.getHours() + getRandomIntegerNumber(1, 5))),
     price: getRandomIntegerNumber(120, 1400)
   };
 };

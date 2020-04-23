@@ -1,5 +1,5 @@
 import AbstractComponent from "../abstract";
-import {createFiltersTemplate} from "./filters-tpl.js";
+import {createFiltersTemplate} from "./filters-tpl";
 
 export default class Filter extends AbstractComponent {
   constructor(filters) {

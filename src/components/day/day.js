@@ -2,13 +2,13 @@ import AbstractComponent from "../abstract";
 import {createTripDayTemplate} from "./day-tpl";
 
 export default class Day extends AbstractComponent {
-  constructor(trips, index) {
+  constructor(checkin, index) {
     super();
-    this._trips = trips;
+    this._checkin = checkin;
     this._index = index;
   }
 
   getTemplate() {
-    return createTripDayTemplate(this._trips[0].checkin, this._index);
+    return createTripDayTemplate(this._checkin, this._index);
   }
 }
