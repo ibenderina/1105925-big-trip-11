@@ -12,10 +12,16 @@ export default class Edit extends AbstractComponent {
   }
 
   setChangeEventTypeHandler(handler) {
-    this.getElement().querySelectorAll(`.event__type-input`).
-    forEach((item) => {
-      item.addEventListener(`change`, handler);
-    });
+    this.getElement()
+      .querySelectorAll(`.event__type-input`)
+      .forEach((item) => {
+        item.addEventListener(`change`, handler);
+      });
+  }
+
+  setChangeDestinationHandler(handler) {
+    this.getElement().querySelector(`.event__input--destination`)
+      .addEventListener(`focusout`, handler);
   }
 
   setToggleKeydownEnterHandler(handler) {
@@ -30,5 +36,10 @@ export default class Edit extends AbstractComponent {
 
   setSubmitHandler(handler) {
     this.getElement().addEventListener(`submit`, handler);
+  }
+
+  setClickFavoriteButtonHandler(handler) {
+    this.getElement().querySelector(`.event__favorite-btn`)
+      .addEventListener(`click`, handler);
   }
 }

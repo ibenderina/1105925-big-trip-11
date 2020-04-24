@@ -101,5 +101,9 @@ const SortType = {
   PRICE: `by-price`,
   DEFAULT: `default`
 };
+const Mode = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
 
-export {RenderPosition, Key, TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, TimeValue, isEscPressed, isEnterPressed, SortType};
+export {RenderPosition, Key, TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, TimeValue, isEscPressed, isEnterPressed, SortType, Mode};
