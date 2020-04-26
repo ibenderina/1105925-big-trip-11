@@ -1,14 +1,37 @@
-import AbstractComponent from "../abstract";
 import {createEditTemplate} from "./edit-tpl";
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import AbstractSmartComponent from "../smart";
 
-export default class Edit extends AbstractComponent {
+export default class Edit extends AbstractSmartComponent {
   constructor(trip) {
     super();
     this._trip = trip;
+    this._flatpickr = null;
+    this._applyFlatpickr();
   }
 
   getTemplate() {
     return createEditTemplate(this._trip);
+  }
+
+  rerender() {
+    super.rerender();
+
+    this._applyFlatpickr();
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    const dateElement = this.getElement().querySelectorAll(`.event__input--time`);
+    this._flatpickr = flatpickr(dateElement, {
+      dateFormat: `Y/m/d H:i`,
+      enableTime: true,
+    });
   }
 
   setChangeEventTypeHandler(handler) {

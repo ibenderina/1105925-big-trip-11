@@ -51,6 +51,12 @@ export default class PointController {
     }
   }
 
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceTripToEvent();
+    }
+  }
+
   _onEscKeydown(evt) {
     if (isEscPressed(evt.key)) {
       document.removeEventListener(`keydown`, this._onEscKeydown);
@@ -98,11 +104,5 @@ export default class PointController {
 
   _replaceTripToEvent() {
     replace(this._eventComponent, this._editComponent);
-  }
-
-  setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._replaceTripToEvent();
-    }
   }
 }

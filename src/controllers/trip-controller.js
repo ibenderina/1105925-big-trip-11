@@ -2,7 +2,7 @@ import DayComponent from "../components/day/day";
 import EventsComponent from "../components/events/events";
 import EventsItemComponent from "../components/events-item/events-item";
 import SortComponent from "../components/sort/sort";
-import {getFormattedDate, getUniqueTripDates} from "../utils/common";
+import {formatDate, getUniqueTripDates} from "../utils/common";
 import {render} from "../utils/render";
 import {RenderPosition, SortType} from "../consts";
 import NoEventsComponent from "../components/no-events/no-events";
@@ -31,13 +31,15 @@ export default class TripController {
     this._renderTripDays(this._container.getElement(), trips);
 
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
-      const sortedTrips = this._getSortedTrips(trips, sortType, 0);
-      this._container.getElement().innerHTML = ``;
-
-      if (sortType === SortType.DEFAULT) {
-        return this._renderTripDays(this._container.getElement(), sortedTrips);
+      if (sortType) {
+        const sortedTrips = this._getSortedTrips(trips, sortType, 0);
+        this._container.getElement().innerHTML = ``;
+        if (sortType === SortType.DEFAULT) {
+          return this._renderTripDays(this._container.getElement(), sortedTrips);
+        }
+        return this._renderSortedTripDays(this._container.getElement(), sortedTrips);
       }
-      return this._renderSortedTripDays(this._container.getElement(), sortedTrips);
+      return null;
     });
   }
 
@@ -74,7 +76,7 @@ export default class TripController {
     const dates = getUniqueTripDates(trips);
     return dates.map((date, i) => {
       const sortedTrips = trips.filter((trip) => {
-        return getFormattedDate(trip.checkin, `Y-m-d`) === date;
+        return formatDate(trip.checkin, `Y-m-d`) === date;
       });
       tripDaysElement.appendChild(this._renderTripDay(sortedTrips, i));
     });

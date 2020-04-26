@@ -1,4 +1,4 @@
-import {capitalize, getDuration, getTime} from "../../utils/common";
+import {capitalize, getDuration, formatTime} from "../../utils/common";
 
 const createOfferBlock = (offer) => {
   return `<li class="event__offer">
@@ -21,9 +21,9 @@ const createEventTemplate = (trip) => {
 
             <div class="event__schedule">
             <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T10:30">${getTime(trip.checkin)}</time>
+            <time class="event__start-time" datetime="2019-03-18T10:30">${formatTime(trip.checkin)}</time>
             &mdash;
-          <time class="event__end-time" datetime="2019-03-18T11:00">${getTime(trip.checkout)}</time>
+          <time class="event__end-time" datetime="2019-03-18T11:00">${formatTime(trip.checkout)}</time>
             </p>
             <p class="event__duration">${getDuration(trip)}</p>
             </div>

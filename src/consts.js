@@ -105,5 +105,18 @@ const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
 };
+const dataCount = {
+  EMPTY_MOCKS: 1,
+  MIN_MOCKS: 1,
+  MAX_MOCKS: 5,
+  MIN_TIME: 1,
+  MAX_TIME: 45,
+  MIN_PRICE: 120,
+  MAX_PRICE: 1400,
+  MIN_TRIPS: 15,
+  MAX_TRIPS: 15,
+  START_WEEK: 0,
+  END_WEEK: 8,
+};
 
-export {RenderPosition, Key, TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, TimeValue, isEscPressed, isEnterPressed, SortType, Mode};
+export {RenderPosition, Key, TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, TimeValue, dataCount, isEscPressed, isEnterPressed, SortType, Mode};
