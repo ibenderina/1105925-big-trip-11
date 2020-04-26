@@ -1,4 +1,4 @@
-import {EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, dataCount} from "../consts";
+import {EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, dataCount} from "Consts";
 
 const mockPhotos = (count) => {
   return new Array(count).fill(``).map(function () {

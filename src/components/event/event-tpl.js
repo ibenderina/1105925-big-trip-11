@@ -1,4 +1,5 @@
-import {capitalize, getDuration, formatTime} from "../../utils/common";
+import {capitalize, getDuration, formatTime} from "Utils/common";
+import {dataCount} from "Consts";
 
 const createOfferBlock = (offer) => {
   return `<li class="event__offer">
@@ -9,7 +10,7 @@ const createOfferBlock = (offer) => {
 };
 
 const createEventTemplate = (trip) => {
-  const offers = (trip.offers || []).map((value) => {
+  const offers = (trip.offers || []).slice(dataCount.MIN_SHOWN_OFFERS, dataCount.MAX_SHOWN_OFFERS).map((value) => {
     return createOfferBlock(value);
   }).join(``);
 

@@ -1,11 +1,11 @@
-import DayComponent from "../components/day/day";
-import EventsComponent from "../components/events/events";
-import EventsItemComponent from "../components/events-item/events-item";
-import SortComponent from "../components/sort/sort";
-import {formatDate, getUniqueTripDates} from "../utils/common";
-import {render} from "../utils/render";
-import {RenderPosition, SortType} from "../consts";
-import NoEventsComponent from "../components/no-events/no-events";
+import DayComponent from "Components/day/day";
+import EventsComponent from "Components/events/events";
+import EventsItemComponent from "Components/events-item/events-item";
+import SortComponent from "Components/sort/sort";
+import {formatDate, getUniqueTripDates} from "Utils/common";
+import {render} from "Utils/render";
+import {RenderPosition, SortType} from "Consts";
+import NoEventsComponent from "Components/no-events/no-events";
 import PointController from "./point-controller";
 
 export default class TripController {

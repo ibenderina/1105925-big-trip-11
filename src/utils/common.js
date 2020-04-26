@@ -1,4 +1,19 @@
 import moment from "moment";
+import {notDigit} from "Consts";
+import flatpickr from "flatpickr";
+
+export const editTripTime = (element, minDate, onChange) => {
+  flatpickr(element, {
+    dateFormat: `d/m/Y H:i`,
+    enableTime: true,
+    onChange,
+    minDate
+  });
+};
+
+export const getDigits = (string) => {
+  return string.replace(notDigit, ``);
+};
 
 export const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -20,7 +35,7 @@ export const getDuration = (time) => {
 
 export const getUniqueTripDates = (events) => {
   return [...new Set(events.map((trip) => {
-    return formatDate(trip.checkin, `Y-m-d`);
+    return formatDate(trip.checkin, `d-m-Y`);
   }))];
 };
 
@@ -29,5 +44,5 @@ export const formatTime = (date) => {
 };
 
 export const formatDate = (date) => {
-  return moment(date).format(`YYYY/MM/DD`);
+  return moment(date).format(`DD/MM/YYYY`);
 };

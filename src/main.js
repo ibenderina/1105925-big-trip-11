@@ -1,11 +1,11 @@
-import FiltersComponent from "./components/filters/filters";
-import MenuComponent from "./components/menu/menu";
-import TripDaysComponent from "./components/days/days";
-import TripInfoComponent from "./components/info/info";
-import TripController from "./controllers/trip-controller";
+import FiltersComponent from "Components/filters/filters";
+import MenuComponent from "Components/menu/menu";
+import TripDaysComponent from "Components/days/days";
+import TripInfoComponent from "Components/info/info";
+import TripController from "Controllers/trip-controller";
 import {getTripData} from "./mock/trip";
-import {render} from "./utils/render";
-import {RenderPosition} from "./consts";
+import {render} from "Utils/render";
+import {RenderPosition} from "Consts";
 
 const trips = getTripData();
 

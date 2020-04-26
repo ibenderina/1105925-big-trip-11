@@ -1,7 +1,7 @@
 import {createEditTemplate} from "./edit-tpl";
-import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import AbstractSmartComponent from "../smart";
+import {editTripTime} from "Utils/common";
 
 export default class Edit extends AbstractSmartComponent {
   constructor(trip) {
@@ -27,11 +27,14 @@ export default class Edit extends AbstractSmartComponent {
       this._flatpickr = null;
     }
 
-    const dateElement = this.getElement().querySelectorAll(`.event__input--time`);
-    this._flatpickr = flatpickr(dateElement, {
-      dateFormat: `Y/m/d H:i`,
-      enableTime: true,
+    const dateEndElement = this.getElement().querySelector(`#event-end-time-1`);
+    const dateStartElement = this.getElement().querySelector(`#event-start-time-1`);
+
+    editTripTime(dateStartElement, `today`, (selectedDates, dateStr) => {
+      editTripTime(dateEndElement, dateStr);
     });
+
+    editTripTime(dateEndElement, this._trip.checkin);
   }
 
   setChangeEventTypeHandler(handler) {
@@ -64,5 +67,15 @@ export default class Edit extends AbstractSmartComponent {
   setClickFavoriteButtonHandler(handler) {
     this.getElement().querySelector(`.event__favorite-btn`)
       .addEventListener(`click`, handler);
+  }
+
+  setInputHandler(handler) {
+    this.getElement().querySelector(`.event__input--destination`)
+      .addEventListener(`keydown`, handler);
+  }
+
+  setPriceInputHandler(handler) {
+    this.getElement().querySelector(`.event__input--price`)
+      .addEventListener(`input`, handler);
   }
 }

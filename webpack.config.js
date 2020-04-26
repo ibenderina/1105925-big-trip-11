@@ -26,6 +26,14 @@ module.exports = (env) => {
       new MomentLocalesPlugin({
         localesToKeep: [`es-us`]
       })
-    ]
+    ],
+    resolve: {
+      alias: {
+        Utils: path.resolve(__dirname, `src/utils`),
+        Components: path.resolve(__dirname, `src/components`),
+        Consts: path.resolve(__dirname, `src/consts`),
+        Controllers: path.resolve(__dirname, `src/controllers`)
+      }
+    }
   };
 };

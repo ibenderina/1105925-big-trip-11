@@ -1,5 +1,5 @@
-import {TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES} from "../../consts";
-import {formatDate, formatTime} from "../../utils/common";
+import {TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES} from "Consts";
+import {formatDate, formatTime} from "Utils/common";
 
 const createEventType = (index, value, t) => {
   const lowerCase = value.toLowerCase();
@@ -124,7 +124,7 @@ const createEditTemplate = (trip) => {
                   <span class="visually-hidden">Price</span>
                   &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${trip.price}" min="0">
+                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${trip.price}" min="0">
               </div>
 
               <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
