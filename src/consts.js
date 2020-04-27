@@ -1,20 +1,24 @@
-const RenderPosition = {
+export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   BEFOREBEGIN: `beforebegin`,
   AFTEREND: `afterend`
 };
+
 const Key = {
   ESC: [`Escape`, `Ecs`],
   ENTER: `Enter`
 };
 
-const isEscPressed = (key) => Key.ESC.includes(key);
-const isEnterPressed = (key) => key === Key.ENTER;
+export const isEscPressed = (key) => Key.ESC.includes(key);
 
-const TRANSFER = `to`;
-const ACTIVITY = `in`;
-const EVENT_TYPES = [
+export const isEnterPressed = (key) => key === Key.ENTER;
+
+export const TRANSFER = `to`;
+
+export const ACTIVITY = `in`;
+
+export const EVENT_TYPES = [
   {
     name: `Taxi`,
     type: TRANSFER
@@ -56,8 +60,10 @@ const EVENT_TYPES = [
     type: ACTIVITY
   }
 ];
-const EVENT_CITIES = [`Gallifrey`, `Mandalor`, `Tatooine`, `Death Star`];
-const DESCRIPTION = [
+
+export const EVENT_CITIES = [`Gallifrey`, `Mandalor`, `Tatooine`, `Death Star`];
+
+export const DESCRIPTION = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget.`,
   `Fusce tristique felis at fermentum pharetra.`,
@@ -70,7 +76,8 @@ const DESCRIPTION = [
   `Nunc fermentum tortor ac porta dapibus.`,
   `In rutrum ac purus sit amet tempus.`
 ];
-const OFFERS = [
+
+export const OFFERS = [
   {
     name: `Hang out with AC/DC`,
     price: `100`
@@ -91,19 +98,39 @@ const OFFERS = [
     name: `Add cute kittens`,
     price: `45`
   }];
-const TimeValue = {
+
+export const TimeValue = {
   MIN: 60,
   HOURS: 60,
   SEC: 1000
 };
-const SortType = {
+
+export const SortType = {
   TIME: `by-time`,
   PRICE: `by-price`,
   DEFAULT: `default`
 };
-const Mode = {
+
+export const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
 };
 
-export {RenderPosition, Key, TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, TimeValue, isEscPressed, isEnterPressed, SortType, Mode};
+export const dataCount = {
+  EMPTY_MOCKS: 1,
+  MIN_MOCKS: 1,
+  MAX_MOCKS: 5,
+  MIN_SHOWN_OFFERS: 0,
+  MAX_SHOWN_OFFERS: 3,
+  MIN_TIME: 1,
+  MAX_TIME: 45,
+  MIN_PRICE: 120,
+  MAX_PRICE: 1400,
+  MIN_TRIPS: 15,
+  MAX_TRIPS: 15,
+  START_WEEK: 0,
+  END_WEEK: 8,
+  MAX_DESTINATIONS: 3
+};
+
+export const notDigit = new RegExp(`[^0-9]`, `gim`);

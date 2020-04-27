@@ -1,8 +1,8 @@
-import {DESCRIPTION, isEnterPressed, isEscPressed, OFFERS, Mode} from "../consts";
-import {replace} from "../utils/render";
-import {capitalize} from "../utils/common";
-import EventComponent from "../components/event/event";
-import EditComponent from "../components/edit/edit";
+import {DESCRIPTION, isEnterPressed, isEscPressed, OFFERS, Mode} from "Consts";
+import {replace} from "Utils/render";
+import {capitalize, getDigits} from "Utils/common";
+import EventComponent from "Components/event/event";
+import EditComponent from "Components/edit/edit";
 import {getRandomElements, getRandomIntegerNumber, mockPhotos} from "../mock/trip";
 
 export default class PointController {
@@ -42,12 +42,20 @@ export default class PointController {
     this._editComponent.setToggleKeydownEnterHandler(this._onToggleKeydownEnter);
     this._editComponent.setChangeEventTypeHandler(this._eventTypeChanger);
     this._editComponent.setClickFavoriteButtonHandler(this._onDataChange);
+    this._editComponent.setInputHandler(this._forbidDestination);
+    this._editComponent.setPriceInputHandler(this._changePrice);
 
     if (oldEditComponent && oldEventComponent) {
       replace(this._editComponent, oldEditComponent);
       replace(this._eventComponent, oldEventComponent);
     } else {
       this._container.appendChild(this._eventComponent.getElement());
+    }
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceTripToEvent();
     }
   }
 
@@ -100,9 +108,13 @@ export default class PointController {
     replace(this._eventComponent, this._editComponent);
   }
 
-  setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._replaceTripToEvent();
-    }
+  _forbidDestination(evt) {
+    evt.preventDefault();
+    evt.target.value = ``;
+  }
+
+  _changePrice(evt) {
+    evt.preventDefault();
+    evt.target.value = getDigits(evt.target.value);
   }
 }

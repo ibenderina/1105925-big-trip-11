@@ -1,49 +1,48 @@
-import {TimeValue} from "../consts";
+import moment from "moment";
+import {notDigit} from "Consts";
+import flatpickr from "flatpickr";
 
-const capitalize = (string) => {
+export const editTripTime = (element, minDate, onChange) => {
+  flatpickr(element, {
+    dateFormat: `d/m/Y H:i`,
+    enableTime: true,
+    onChange,
+    minDate
+  });
+};
+
+export const getDigits = (string) => {
+  return string.replace(notDigit, ``);
+};
+
+export const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const calcTotalCost = (trips) => {
+export const calcTotalCost = (trips) => {
   return trips.reduce((sum, trip) => {
     return sum + trip.price;
   }, 0);
 };
 
-const getTime = (date) => {
-  const minute = `0${date.getMinutes()}`.slice(-2);
-  return `${date.getHours()}:${minute}`;
+export const getDuration = (time) => {
+  const duration = moment.duration(time.checkout - time.checkin);
+  const days = duration.days() ? `${duration.days()}D` : ``;
+  const hours = duration.hours() ? `${duration.hours()}H` : ``;
+  const minutes = duration.minutes() ? `${duration.minutes()}M` : ``;
+  return `${days} ${hours} ${minutes}`;
 };
 
-const getDuration = (time) => {
-  const start = new Date(time.checkin);
-  const end = new Date(time.checkout);
-  const durationMinutesAll = (end - start) / (TimeValue.SEC * TimeValue.MIN);
-  const durationHours = durationMinutesAll / TimeValue.HOURS;
-  const durationMinutes = durationMinutesAll - durationHours * TimeValue.MIN;
-  if (durationMinutes === 0) {
-    return `${durationHours}H`;
-  }
-  return `${durationHours}H ${durationMinutesAll - durationHours * TimeValue.MIN}MIN`;
-};
-
-const getUniqueTripDates = (events) => {
+export const getUniqueTripDates = (events) => {
   return [...new Set(events.map((trip) => {
-    return getFormattedDate(trip.checkin, `Y-m-d`);
+    return formatDate(trip.checkin, `d-m-Y`);
   }))];
 };
 
-const addLeadZero = (argument) => {
-  return `0${argument}`.slice(-2);
+export const formatTime = (date) => {
+  return moment(date).format(`hh:mm`);
 };
 
-const getFormattedDate = (date, format) => {
-  format = format.replace(`d`, addLeadZero(date.getDate()));
-  format = format.replace(`m`, addLeadZero(date.getMonth()));
-  format = format.replace(`Y`, date.getFullYear());
-  format = format.replace(`H`, addLeadZero(date.getHours()));
-  format = format.replace(`i`, addLeadZero(date.getMinutes()));
-  return format;
+export const formatDate = (date) => {
+  return moment(date).format(`DD/MM/YYYY`);
 };
-
-export {capitalize, getTime, getDuration, getUniqueTripDates, getFormattedDate, calcTotalCost};

@@ -1,10 +1,10 @@
-import {getFormattedDate} from "../../utils/common";
+import {formatDate} from "Utils/common";
 
 const showDayInfo = (checkin, index, hiddenDayInfo) => {
   const visibilityHidden = hiddenDayInfo ? `visibility-hidden` : ``;
   const monthName = checkin.toLocaleString(`default`, {month: `short`});
   const day = checkin.getDate();
-  const date = getFormattedDate(checkin, `Y-m-d`);
+  const date = formatDate(checkin);
   return `<div class="day__info ${visibilityHidden}">
             <span class="day__counter">${index + 1}</span>
             <time class="day__date" datetime="${date}">

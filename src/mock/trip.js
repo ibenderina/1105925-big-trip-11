@@ -1,4 +1,4 @@
-import {EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS} from "../consts";
+import {EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, dataCount} from "Consts";
 
 const mockPhotos = (count) => {
   return new Array(count).fill(``).map(function () {
@@ -7,7 +7,7 @@ const mockPhotos = (count) => {
 };
 
 const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
+  const randomIndex = getRandomIntegerNumber(dataCount.EMPTY_MOCKS, array.length);
 
   return array[randomIndex];
 };
@@ -17,7 +17,7 @@ const getRandomIntegerNumber = (min, max) => {
 };
 
 const getRandomElements = (element, min, max) => {
-  const randomIndex = getRandomIntegerNumber(0, element.length);
+  const randomIndex = getRandomIntegerNumber(dataCount.EMPTY_MOCKS, element.length);
   return element.slice(randomIndex, randomIndex + getRandomIntegerNumber(min, max));
 };
 
@@ -26,21 +26,21 @@ const createTripDataElement = () => {
   return {
     targetType: getRandomArrayItem(EVENT_TYPES),
     destination: getRandomArrayItem(EVENT_CITIES),
-    offers: getRandomElements(OFFERS, 0, 5),
+    offers: getRandomElements(OFFERS, dataCount.EMPTY_MOCKS, dataCount.MAX_MOCKS),
     info: {
-      description: getRandomElements(DESCRIPTION, 1, 5),
-      photos: mockPhotos(getRandomIntegerNumber(1, 5))
+      description: getRandomElements(DESCRIPTION, dataCount.MIN_MOCKS, dataCount.MAX_MOCKS),
+      photos: mockPhotos(getRandomIntegerNumber(dataCount.MIN_MOCKS, dataCount.MAX_MOCKS))
     },
     checkin: date,
-    checkout: new Date(new Date(date).setHours(date.getHours() + getRandomIntegerNumber(1, 5))),
-    price: getRandomIntegerNumber(120, 1400)
+    checkout: new Date(new Date(date).setHours(date.getHours() + getRandomIntegerNumber(dataCount.MIN_TIME, dataCount.MAX_TIME))),
+    price: getRandomIntegerNumber(dataCount.MIN_PRICE, dataCount.MAX_PRICE)
   };
 };
 
 const getRandomDate = () => {
   const targetDate = new Date();
   const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffValue = sign * getRandomIntegerNumber(0, 8);
+  const diffValue = sign * getRandomIntegerNumber(dataCount.START_WEEK, dataCount.END_WEEK);
 
   targetDate.setDate(targetDate.getDate() + diffValue);
   targetDate.setHours(targetDate.getHours() + diffValue);
@@ -49,7 +49,7 @@ const getRandomDate = () => {
 };
 
 const getTripData = () => {
-  return new Array(getRandomIntegerNumber(15, 20)).fill(``).map(createTripDataElement).sort((a, b) => {
+  return new Array(getRandomIntegerNumber(dataCount.MIN_TRIPS, dataCount.MAX_TRIPS)).fill(``).map(createTripDataElement).sort((a, b) => {
     return a.checkin - b.checkin;
   });
 };

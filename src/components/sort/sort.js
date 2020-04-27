@@ -1,6 +1,6 @@
 import AbstractComponent from "../abstract";
 import {createSortTemplate} from "./sort-tpl";
-import {SortType} from "../../consts";
+import {SortType} from "Consts";
 
 export default class Sort extends AbstractComponent {
   constructor() {
@@ -16,7 +16,9 @@ export default class Sort extends AbstractComponent {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
-      if (!evt.target.closest(`.trip-sort__btn`)) {
+      const sortItem = evt.target.closest(`.trip-sort__item`);
+
+      if (!sortItem) {
         return;
       }
 
@@ -27,6 +29,10 @@ export default class Sort extends AbstractComponent {
       }
 
       this._currenSortType = sortType;
+      const sortInput = sortItem.querySelector(`.trip-sort__input`);
+      if (sortInput) {
+        sortInput.checked = true;
+      }
 
       handler(this._currenSortType);
     });

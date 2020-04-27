@@ -1,5 +1,5 @@
-import {TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES} from "../../consts";
-import {getFormattedDate} from "../../utils/common";
+import {TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES} from "Consts";
+import {capitalize, formatDate, formatTime} from "Utils/common";
 
 const createEventType = (index, value, t) => {
   const lowerCase = value.toLowerCase();
@@ -76,7 +76,7 @@ const createEditTemplate = (trip) => {
               <div class="event__type-wrapper" tabindex="0">
                 <label class="event__type  event__type-btn" for="event-type-toggle-1">
                   <span class="visually-hidden">Choose event type</span>
-                  <img class="event__type-icon" width="17" height="17" src="img/icons/${trip.targetType.name}.png" alt="Event type icon">
+                  <img class="event__type-icon" width="17" height="17" src="img/icons/${capitalize(trip.targetType.name)}.png" alt="Event type icon">
                 </label>
                 <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -111,12 +111,12 @@ const createEditTemplate = (trip) => {
                 <label class="visually-hidden" for="event-start-time-1">
                   From
                 </label>
-                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormattedDate(trip.checkin, `d/m/Y H:i`)}">
+                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDate(trip.checkin)} ${formatTime(trip.checkin)}}">
                 &mdash;
                 <label class="visually-hidden" for="event-end-time-1">
                   To
                 </label>
-                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormattedDate(trip.checkout, `d/m/Y H:i`)}">
+                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDate(trip.checkout)} ${formatTime(trip.checkout)}}">
               </div>
 
               <div class="event__field-group  event__field-group--price">
@@ -124,7 +124,7 @@ const createEditTemplate = (trip) => {
                   <span class="visually-hidden">Price</span>
                   &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${trip.price}" min="0">
+                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${trip.price}" min="0">
               </div>
 
               <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
