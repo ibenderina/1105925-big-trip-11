@@ -1,4 +1,4 @@
-import {EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, dataCount} from "Consts";
+import {EVENT_TYPES, EVENT_CITIES, DESCRIPTION, OFFERS, mocksDataCount, dataCount} from "@consts";
 
 const mockPhotos = (count) => {
   return new Array(count).fill(``).map(function () {
@@ -7,7 +7,7 @@ const mockPhotos = (count) => {
 };
 
 const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(dataCount.EMPTY_MOCKS, array.length);
+  const randomIndex = getRandomIntegerNumber(mocksDataCount.EMPTY, array.length);
 
   return array[randomIndex];
 };
@@ -17,23 +17,24 @@ const getRandomIntegerNumber = (min, max) => {
 };
 
 const getRandomElements = (element, min, max) => {
-  const randomIndex = getRandomIntegerNumber(dataCount.EMPTY_MOCKS, element.length);
+  const randomIndex = getRandomIntegerNumber(mocksDataCount.EMPTY, element.length);
   return element.slice(randomIndex, randomIndex + getRandomIntegerNumber(min, max));
 };
 
 const createTripDataElement = () => {
   let date = getRandomDate();
   return {
+    id: String(new Date() + Math.random()),
     targetType: getRandomArrayItem(EVENT_TYPES),
     destination: getRandomArrayItem(EVENT_CITIES),
-    offers: getRandomElements(OFFERS, dataCount.EMPTY_MOCKS, dataCount.MAX_MOCKS),
+    offers: getRandomElements(OFFERS, mocksDataCount.EMPTY, mocksDataCount.MAX),
     info: {
-      description: getRandomElements(DESCRIPTION, dataCount.MIN_MOCKS, dataCount.MAX_MOCKS),
-      photos: mockPhotos(getRandomIntegerNumber(dataCount.MIN_MOCKS, dataCount.MAX_MOCKS))
+      description: getRandomElements(DESCRIPTION, mocksDataCount.MIN, mocksDataCount.MAX),
+      photos: mockPhotos(getRandomIntegerNumber(mocksDataCount.MIN, mocksDataCount.MAX))
     },
     checkin: date,
-    checkout: new Date(new Date(date).setHours(date.getHours() + getRandomIntegerNumber(dataCount.MIN_TIME, dataCount.MAX_TIME))),
-    price: getRandomIntegerNumber(dataCount.MIN_PRICE, dataCount.MAX_PRICE)
+    checkout: new Date(new Date(date).setHours(date.getHours() + getRandomIntegerNumber(mocksDataCount.MIN_TIME, mocksDataCount.MAX_TIME))),
+    price: getRandomIntegerNumber(mocksDataCount.MIN_PRICE, mocksDataCount.MAX_PRICE)
   };
 };
 
@@ -49,7 +50,7 @@ const getRandomDate = () => {
 };
 
 const getTripData = () => {
-  return new Array(getRandomIntegerNumber(dataCount.MIN_TRIPS, dataCount.MAX_TRIPS)).fill(``).map(createTripDataElement).sort((a, b) => {
+  return new Array(getRandomIntegerNumber(mocksDataCount.MIN_SHOWN_TRIPS, mocksDataCount.MAX_SHOWN_TRIPS)).fill(``).map(createTripDataElement).sort((a, b) => {
     return a.checkin - b.checkin;
   });
 };

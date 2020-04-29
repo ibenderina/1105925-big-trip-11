@@ -1,8 +1,8 @@
-import {DESCRIPTION, isEnterPressed, isEscPressed, OFFERS, Mode} from "Consts";
-import {replace} from "Utils/render";
-import {capitalize, getDigits} from "Utils/common";
-import EventComponent from "Components/event/event";
-import EditComponent from "Components/edit/edit";
+import {DESCRIPTION, OFFERS, EventsSortMode} from "@consts";
+import {replace} from "@utils/render";
+import {capitalize, getDigits, isEnterPressed, isEscPressed} from "@utils/common";
+import EventComponent from "@components/event/event";
+import EditComponent from "@components/edit/edit";
 import {getRandomElements, getRandomIntegerNumber, mockPhotos} from "../mock/trip";
 
 export default class PointController {
@@ -11,7 +11,7 @@ export default class PointController {
     this._eventComponent = null;
     this._editComponent = null;
     this._onViewChange = onViewChange;
-    this._mode = Mode.DEFAULT;
+    this._mode = EventsSortMode.DEFAULT;
     this._onDataChange = onDataChange;
     this._trip = null;
     this._replaceTripToEdit = this._replaceTripToEdit.bind(this);
@@ -54,7 +54,7 @@ export default class PointController {
   }
 
   setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
+    if (this._mode !== EventsSortMode.DEFAULT) {
       this._replaceTripToEvent();
     }
   }
@@ -69,7 +69,7 @@ export default class PointController {
   _replaceTripToEdit() {
     document.addEventListener(`keydown`, this._onEscKeydown);
     this._onViewChange();
-    this._mode = Mode.EDIT;
+    this._mode = EventsSortMode.EDIT;
     replace(this._editComponent, this._eventComponent);
   }
 

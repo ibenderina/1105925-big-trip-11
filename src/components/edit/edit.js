@@ -1,7 +1,7 @@
+import AbstractSmartComponent from "@smart-abstract";
 import {createEditTemplate} from "./edit-tpl";
+import {editTripTime} from "@utils/common";
 import "flatpickr/dist/flatpickr.min.css";
-import AbstractSmartComponent from "../smart";
-import {editTripTime} from "Utils/common";
 
 export default class Edit extends AbstractSmartComponent {
   constructor(trip) {

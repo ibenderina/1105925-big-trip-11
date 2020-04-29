@@ -1,4 +1,4 @@
-import AbstractComponent from "../abstract";
+import AbstractComponent from "@abstract";
 import {createCostTemplate} from "./cost-tpl";
 
 export default class Cost extends AbstractComponent {

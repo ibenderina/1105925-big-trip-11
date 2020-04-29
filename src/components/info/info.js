@@ -1,9 +1,9 @@
-import AbstractComponent from "../abstract";
+import AbstractComponent from "@abstract";
 import CostComponent from "../cost/cost";
-import {render} from "Utils/render";
-import {calcTotalCost} from "Utils/common";
+import {render} from "@utils/render";
+import {calcTotalCost} from "@utils/common";
 import {createTripInfoTemplate} from "./info-tpl";
-import {dataCount, RenderPosition} from "Consts";
+import {dataCount, RenderPosition} from "@consts";
 
 export default class Info extends AbstractComponent {
   constructor(trips) {
@@ -22,7 +22,7 @@ export default class Info extends AbstractComponent {
 
     datesOfTrip = [datesOfTrip[0], datesOfTrip[datesOfTrip.length - 1]];
 
-    if (destinations.length > dataCount.MAX_DESTINATIONS) {
+    if (destinations.length > dataCount.MAX_SHOWN_DESTINATIONS) {
       destinations = [destinations[0], `...`, destinations[destinations.length - 1]];
     }
     return createTripInfoTemplate(this._trips.length, destinations.join(` — `), datesOfTrip);

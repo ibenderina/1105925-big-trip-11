@@ -1,5 +1,5 @@
-import {capitalize, getDuration, formatTime} from "Utils/common";
-import {dataCount} from "Consts";
+import {capitalize, getDuration, formatTime} from "@utils/common";
+import {dataCount} from "@consts";
 
 const createOfferBlock = (offer) => {
   return `<li class="event__offer">

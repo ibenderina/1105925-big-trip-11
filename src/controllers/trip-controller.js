@@ -1,15 +1,15 @@
-import DayComponent from "Components/day/day";
-import EventsComponent from "Components/events/events";
-import EventsItemComponent from "Components/events-item/events-item";
-import SortComponent from "Components/sort/sort";
-import {formatDate, getUniqueTripDates} from "Utils/common";
-import {render} from "Utils/render";
-import {RenderPosition, SortType} from "Consts";
-import NoEventsComponent from "Components/no-events/no-events";
+import DayComponent from "@components/day/day";
+import EventsComponent from "@components/events/events";
+import EventsItemComponent from "@components/events-item/events-item";
+import SortComponent from "@components/sort/sort";
+import {formatDate, getUniqueTripDates} from "@utils/common";
+import {render} from "@utils/render";
+import {RenderPosition, SortType} from "@consts";
+import NoEventsComponent from "@components/no-events/no-events";
 import PointController from "./point-controller";
 
 export default class TripController {
-  constructor(container) {
+  constructor(container, pointsModel) {
     this._container = container;
     this._sortComponent = new SortComponent();
     this._tripEvents = document.querySelector(`.trip-events`);
@@ -17,10 +17,11 @@ export default class TripController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._showedEventComponents = [];
+    this._modelPoints = pointsModel;
   }
 
-  render(trips) {
-    this._trips = trips;
+  render() {
+    const trips = this._modelPoints.getTrips();
     if (!trips.length) {
       render(this._tripEvents, this._noEvent.getElement(), RenderPosition.BEFOREEND);
     } else {
@@ -44,15 +45,11 @@ export default class TripController {
   }
 
   _onDataChange(pointController, oldData, newData) {
-    const index = this._trips.findIndex((it) => it === oldData);
-
-    if (index === -1) {
-      return;
+    console.log(444);
+    const isSuccess = this._modelPoints.updateTrip(oldData, newData);
+    if (isSuccess) {
+      pointController.render(newData);
     }
-
-    this._trips = [].concat(this._trips.slice(0, index), newData, this._trips.slice(index + 1));
-
-    pointController.render(this._trips[index]);
   }
 
   _sortByCheckin(trips) {

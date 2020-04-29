@@ -1,5 +1,5 @@
-import {TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES} from "Consts";
-import {capitalize, formatDate, formatTime} from "Utils/common";
+import {TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES} from "@consts";
+import {capitalize, formatDate, formatTime} from "@utils/common";
 
 const createEventType = (index, value, t) => {
   const lowerCase = value.toLowerCase();

@@ -1,4 +1,4 @@
-import AbstractComponent from "../abstract";
+import AbstractComponent from "@abstract";
 import {createFiltersTemplate} from "./filters-tpl";
 
 export default class Filter extends AbstractComponent {

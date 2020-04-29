@@ -1,5 +1,5 @@
 import moment from "moment";
-import {notDigit} from "Consts";
+import {Key} from "@consts";
 import flatpickr from "flatpickr";
 
 export const editTripTime = (element, minDate, onChange) => {
@@ -46,3 +46,9 @@ export const formatTime = (date) => {
 export const formatDate = (date) => {
   return moment(date).format(`DD/MM/YYYY`);
 };
+
+export const isEscPressed = (key) => Key.ESC.includes(key);
+
+export const isEnterPressed = (key) => key === Key.ENTER;
+
+export const notDigit = new RegExp(`[^0-9]`, `gim`);
