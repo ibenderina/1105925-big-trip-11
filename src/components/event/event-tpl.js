@@ -1,5 +1,5 @@
-import {capitalize, getDuration, formatTime} from "@utils/common";
-import {dataCount} from "@consts";
+import {getDuration, formatTime} from "@utils/common";
+import {DataCount} from "@consts";
 
 const createOfferBlock = (offer) => {
   return `<li class="event__offer">
@@ -10,13 +10,13 @@ const createOfferBlock = (offer) => {
 };
 
 const createEventTemplate = (trip) => {
-  const offers = (trip.offers || []).slice(dataCount.MIN_SHOWN_OFFERS, dataCount.MAX_SHOWN_OFFERS).map((value) => {
+  const offers = (trip.offers || []).slice(DataCount.MIN_SHOWN_OFFERS, DataCount.MAX_SHOWN_OFFERS).map((value) => {
     return createOfferBlock(value);
   }).join(``);
 
   return `<div class="event">
             <div class="event__type">
-            <img class="event__type-icon" width="42" height="42" src="img/icons/${capitalize(trip.targetType.name)}.png" alt="Event type icon">
+            <img class="event__type-icon" width="42" height="42" src="img/icons/${trip.targetType.name.toLowerCase()}.png" alt="Event type icon">
             </div>
             <h3 class="event__title">${trip.targetType.name} ${trip.targetType.type} ${trip.destination}</h3>
 

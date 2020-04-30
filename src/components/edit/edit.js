@@ -2,6 +2,7 @@ import AbstractSmartComponent from "@smart-abstract";
 import {createEditTemplate} from "./edit-tpl";
 import {editTripTime} from "@utils/common";
 import "flatpickr/dist/flatpickr.min.css";
+import moment from "moment";
 
 export default class Edit extends AbstractSmartComponent {
   constructor(trip) {
@@ -13,6 +14,18 @@ export default class Edit extends AbstractSmartComponent {
 
   getTemplate() {
     return createEditTemplate(this._trip);
+  }
+
+  getData() {
+    const form = this.getElement();
+    const formData = new FormData(form);
+
+    return {
+      destination: formData.get(`event-destination`),
+      checkin: new Date(moment(formData.get(`event-start-time`), `DD/MM/YYYY hh:mm`)),
+      checkout: new Date(moment(formData.get(`event-end-time`), `DD/MM/YYYY hh:mm`)),
+      price: parseInt(formData.get(`event-price`), 10),
+    };
   }
 
   rerender() {

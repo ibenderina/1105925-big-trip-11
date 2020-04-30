@@ -10,4 +10,10 @@ export default class Filter extends AbstractComponent {
   getTemplate() {
     return createFiltersTemplate(this._filters);
   }
+
+  setFilterChangeHandler(handler) {
+    this.getElement().addEventListener(`change`, (evt) => {
+      handler(evt.target.value);
+    });
+  }
 }

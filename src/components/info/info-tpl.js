@@ -6,9 +6,9 @@ const createTripInfoDates = (datesOfTrip) => {
   }).join(` — `);
 };
 
-const createTripInfoTemplate = (shownMainBlock, destinations, datesOfTrip) => {
+const createTripInfoTemplate = (destinations, datesOfTrip) => {
   let mainBlock = ``;
-  if (shownMainBlock) {
+  if (destinations && datesOfTrip) {
     mainBlock = `<div class="trip-info__main">
                     <h1 class="trip-info__title">${destinations}</h1>
                     <p class="trip-info__dates">${createTripInfoDates(datesOfTrip)}</p>

@@ -1,5 +1,5 @@
 import {TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES} from "@consts";
-import {capitalize, formatDate, formatTime} from "@utils/common";
+import {formatDate, formatTime} from "@utils/common";
 
 const createEventType = (index, value, t) => {
   const lowerCase = value.toLowerCase();
@@ -76,7 +76,7 @@ const createEditTemplate = (trip) => {
               <div class="event__type-wrapper" tabindex="0">
                 <label class="event__type  event__type-btn" for="event-type-toggle-1">
                   <span class="visually-hidden">Choose event type</span>
-                  <img class="event__type-icon" width="17" height="17" src="img/icons/${capitalize(trip.targetType.name)}.png" alt="Event type icon">
+                  <img class="event__type-icon" width="17" height="17" src="img/icons/${trip.targetType.name.toLowerCase()}.png" alt="Event type icon">
                 </label>
                 <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 

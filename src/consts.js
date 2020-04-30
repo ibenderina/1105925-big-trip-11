@@ -109,7 +109,7 @@ export const EventsSortMode = {
   EDIT: `edit`,
 };
 
-export const dataCount = {
+export const DataCount = {
   MIN_SHOWN_OFFERS: 0,
   MAX_SHOWN_OFFERS: 3,
   START_WEEK: 0,
@@ -117,7 +117,7 @@ export const dataCount = {
   MAX_SHOWN_DESTINATIONS: 3
 };
 
-export const mocksDataCount = {
+export const MocksDataCount = {
   EMPTY: 0,
   MIN: 1,
   MAX: 5,
@@ -132,4 +132,10 @@ export const mocksDataCount = {
 export const Key = {
   ESC: [`Escape`, `Ecs`],
   ENTER: `Enter`
+};
+
+export const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
 };

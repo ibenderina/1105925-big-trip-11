@@ -19,12 +19,6 @@ export const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-export const calcTotalCost = (trips) => {
-  return trips.reduce((sum, trip) => {
-    return sum + trip.price;
-  }, 0);
-};
-
 export const getDuration = (time) => {
   const duration = moment.duration(time.checkout - time.checkin);
   const days = duration.days() ? `${duration.days()}D` : ``;

@@ -1,15 +1,15 @@
-const render = (container, element, place) => {
+export const render = (container, element, place) => {
   container.insertAdjacentElement(place, element);
 };
 
-const createElement = (template) => {
+export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
 
   return newElement.firstElementChild;
 };
 
-const replace = (newComponent, oldComponent) => {
+export const replace = (newComponent, oldComponent) => {
   const parentElement = oldComponent.getElement().parentElement;
   const newElement = newComponent.getElement();
   const oldElement = oldComponent.getElement();
@@ -21,9 +21,7 @@ const replace = (newComponent, oldComponent) => {
   }
 };
 
-const remove = (component) => {
+export const remove = (component) => {
   component.getElement().remove();
   component.removeElement();
 };
-
-export {render, createElement, replace, remove};
