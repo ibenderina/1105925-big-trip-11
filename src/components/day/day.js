@@ -1,4 +1,4 @@
-import AbstractComponent from "../abstract";
+import AbstractComponent from "@abstract";
 import {createTripDayTemplate} from "./day-tpl";
 
 export default class Day extends AbstractComponent {

@@ -1,4 +1,4 @@
-import {formatDate} from "Utils/common";
+import {formatDate} from "@utils/common";
 
 const showDayInfo = (checkin, index, hiddenDayInfo) => {
   const visibilityHidden = hiddenDayInfo ? `visibility-hidden` : ``;

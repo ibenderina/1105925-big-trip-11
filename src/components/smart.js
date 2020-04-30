@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract";
+import AbstractComponent from "@abstract";
 
 export default class AbstractSmartComponent extends AbstractComponent {
   recoveryListeners() {

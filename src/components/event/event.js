@@ -1,4 +1,4 @@
-import AbstractComponent from "../abstract";
+import AbstractComponent from "@abstract";
 import {createEventTemplate} from "../event/event-tpl";
 
 export default class Event extends AbstractComponent {

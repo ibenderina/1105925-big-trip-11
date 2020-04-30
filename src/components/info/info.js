@@ -1,38 +1,21 @@
-import AbstractComponent from "../abstract";
-import CostComponent from "../cost/cost";
-import {render} from "Utils/render";
-import {calcTotalCost} from "Utils/common";
+import AbstractComponent from "@abstract";
 import {createTripInfoTemplate} from "./info-tpl";
-import {dataCount, RenderPosition} from "Consts";
+import {DataCount} from "@consts";
 
 export default class Info extends AbstractComponent {
-  constructor(trips) {
+  constructor(destinations, datesOfTrip) {
     super();
-    this._trips = trips;
+    this._destinations = destinations;
+    this._datesOfTrip = datesOfTrip;
   }
 
   getTemplate() {
-    let destinations = [...new Set(this._trips.map((trip) => {
-      return trip.destination;
-    }))];
+    let datesOfTrip = [this._datesOfTrip[0], this._datesOfTrip[this._datesOfTrip.length - 1]];
 
-    let datesOfTrip = [...new Set(this._trips.map((trip) => {
-      return trip.checkin;
-    }))];
-
-    datesOfTrip = [datesOfTrip[0], datesOfTrip[datesOfTrip.length - 1]];
-
-    if (destinations.length > dataCount.MAX_DESTINATIONS) {
-      destinations = [destinations[0], `...`, destinations[destinations.length - 1]];
+    let destinations = [];
+    if (this._destinations.length > DataCount.MAX_SHOWN_DESTINATIONS) {
+      destinations = [this._destinations[0], `...`, this._destinations[this._destinations.length - 1]];
     }
-    return createTripInfoTemplate(this._trips.length, destinations.join(` — `), datesOfTrip);
-  }
-
-  getElement() {
-    if (!this._element) {
-      super.getElement();
-      render(this._element, new CostComponent(calcTotalCost(this._trips)).getElement(), RenderPosition.BEFOREEND);
-    }
-    return this._element;
+    return createTripInfoTemplate(destinations.join(` — `), datesOfTrip);
   }
 }

@@ -29,10 +29,13 @@ module.exports = (env) => {
     ],
     resolve: {
       alias: {
-        Utils: path.resolve(__dirname, `src/utils`),
-        Components: path.resolve(__dirname, `src/components`),
-        Consts: path.resolve(__dirname, `src/consts`),
-        Controllers: path.resolve(__dirname, `src/controllers`)
+        '@utils': path.resolve(__dirname, `src/utils`),
+        '@components': path.resolve(__dirname, `src/components`),
+        '@consts': path.resolve(__dirname, `src/consts`),
+        '@controllers': path.resolve(__dirname, `src/controllers`),
+        '@abstract': path.resolve(__dirname, `src/components/abstract`),
+        '@smart-abstract': path.resolve(__dirname, `src/components/smart`),
+        '@models': path.resolve(__dirname, `src/models`),
       }
     }
   };

@@ -1,4 +1,4 @@
-import AbstractComponent from "../abstract";
+import AbstractComponent from "@abstract";
 import {createTripEventsItemTemplate} from "./events-item-tpl";
 
 export default class EventsItem extends AbstractComponent {
