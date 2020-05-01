@@ -30,10 +30,9 @@ export default class FilterController {
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
 
     if (oldComponent) {
-      replace(this._filterComponent, oldComponent);
-    } else {
-      render(container, this._filterComponent.getElement(), RenderPosition.BEFOREEND);
+      return replace(this._filterComponent, oldComponent);
     }
+    return render(container, this._filterComponent.getElement(), RenderPosition.BEFOREEND);
   }
 
   _onFilterChange(filterType) {

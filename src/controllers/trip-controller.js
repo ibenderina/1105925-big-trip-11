@@ -55,11 +55,11 @@ export default class TripController {
     const isSuccess = newData.id ? this._modelPoints.updateTrip(oldData.id, newData) : this._modelPoints.addTrip(newData);
     if (isSuccess) {
       if (pointController) {
-        pointController.render(newData);
-      } else {
-        this._updateTrips();
+        return pointController.render(newData);
       }
+      this._updateTrips();
     }
+    return null;
   }
 
   _renderTripDays(tripDaysElement, trips) {
@@ -120,7 +120,7 @@ export default class TripController {
 
   _changeSortType(sortType) {
     if (sortType) {
-      const sortedTrips = this._modelPoints.sortBy(sortType);
+      const sortedTrips = this._modelPoints.filterBy(this._modelPoints.sortBy(sortType));
       this._container.getElement().innerHTML = ``;
       if (sortType === SortType.DEFAULT) {
         return this._renderTripDays(this._container.getElement(), sortedTrips);

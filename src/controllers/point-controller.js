@@ -67,8 +67,7 @@ export default class PointController {
     document.addEventListener(`keydown`, this._onEscKeydown);
     this._onViewChange();
     this._mode = EventsSortMode.EDIT;
-
-    replace(this._editComponent, this._eventComponent);
+    return replace(this._editComponent, this._eventComponent);
   }
 
   _onToggleKeydownEnter(evt) {
