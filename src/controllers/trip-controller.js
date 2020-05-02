@@ -35,6 +35,14 @@ export default class TripController {
     this._addNewEventHandler();
   }
 
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
+
   render() {
     const trips = this._modelPoints.getTrips();
     if (!trips.length) {
