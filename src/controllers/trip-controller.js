@@ -9,7 +9,7 @@ import PointController from "./point-controller";
 import {formatDate, getUniqueTripDates} from "@utils/common";
 import {render} from "@utils/render";
 import {createTripDataElement} from "../mock/trip";
-import {FilterType, RenderPosition, SortType} from "@consts";
+import {FilterType, HIDDEN_CLASS, RenderPosition, SortType} from "@consts";
 
 export default class TripController {
   constructor(container, pointsModel) {
@@ -36,11 +36,11 @@ export default class TripController {
   }
 
   hide() {
-    this._container.hide();
+    this._tripEvents.classList.add(HIDDEN_CLASS);
   }
 
   show() {
-    this._container.show();
+    this._tripEvents.classList.remove(HIDDEN_CLASS);
   }
 
   render() {
