@@ -29,6 +29,10 @@ export default class FilterController {
     this._filterComponent = new FiltersComponent(filters);
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
 
+    this._tripsModel.setFilterChangeHandler((filterType) => {
+      this._filterComponent.setFilter(filterType);
+    });
+
     if (oldComponent) {
       return replace(this._filterComponent, oldComponent);
     }
