@@ -11,7 +11,11 @@ export default class Menu extends AbstractComponent {
       if (!evt.target.classList.contains(`trip-tabs__btn`)) {
         return;
       }
-
+      const activeTab = document.querySelectorAll(`.trip-tabs__btn--active`);
+      activeTab.forEach((element) => {
+        element.classList.remove(`trip-tabs__btn--active`);
+      });
+      evt.target.classList.add(`trip-tabs__btn--active`);
       const menuItem = evt.target.id;
 
       handler(menuItem);

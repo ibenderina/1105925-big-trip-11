@@ -6,7 +6,7 @@ import StatsComponent from "@components/stats/stats";
 import PointsModel from "@models/points";
 import {getTripData} from "./mock/trip";
 import {render} from "@utils/render";
-import {RenderPosition, MenuItem} from "@consts";
+import {RenderPosition, MenuItem, FilterType} from "@consts";
 
 const trips = getTripData();
 
@@ -30,6 +30,7 @@ render(pageBodyContainer, statisticsComponent.getElement(), RenderPosition.BEFOR
 statisticsComponent.hide();
 
 siteMenuComponent.setOnChange((menuItem) => {
+  modelPoints.setFilter(FilterType.EVERYTHING);
   switch (menuItem) {
     case MenuItem.STATISTICS:
       tripController.hide();

@@ -33,6 +33,8 @@ export default class TripController {
     this._modelPoints.setFilterChangeHandler(this._updateTrips);
 
     this._addNewEventHandler();
+    this._sortComponent.setSortTypeChangeHandler(this._changeSortType);
+    this._modelPoints.setFilterChangeHandler(this._sortComponent.resetSortType);
   }
 
   hide() {
@@ -55,8 +57,6 @@ export default class TripController {
 
     this._renderTripDays(this._container.getElement(), trips);
 
-    this._sortComponent.setSortTypeChangeHandler(this._changeSortType);
-    this._modelPoints.setFilterChangeHandler(this._sortComponent.resetSortType);
     this._newEventBtn.disabled = false;
   }
 
