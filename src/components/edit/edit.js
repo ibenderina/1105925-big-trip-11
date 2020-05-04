@@ -91,4 +91,10 @@ export default class Edit extends AbstractSmartComponent {
     this.getElement().querySelector(`.event__input--price`)
       .addEventListener(`input`, handler);
   }
+
+  setClickCancelButtonHandler(handler) {
+    this.getElement()
+      .querySelector(`.event__reset-btn`)
+  .addEventListener(`click`, handler);
+  }
 }

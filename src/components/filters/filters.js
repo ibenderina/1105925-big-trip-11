@@ -16,4 +16,8 @@ export default class Filter extends AbstractComponent {
       handler(evt.target.value);
     });
   }
+
+  setFilter(filterType) {
+    this.getElement().querySelector(`.trip-filters__filter-input[value="${filterType}"]`).checked = true;
+  }
 }

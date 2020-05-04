@@ -29,11 +29,14 @@ export default class FilterController {
     this._filterComponent = new FiltersComponent(filters);
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
 
+    this._tripsModel.setFilterChangeHandler((filterType) => {
+      this._filterComponent.setFilter(filterType);
+    });
+
     if (oldComponent) {
-      replace(this._filterComponent, oldComponent);
-    } else {
-      render(container, this._filterComponent.getElement(), RenderPosition.BEFOREEND);
+      return replace(this._filterComponent, oldComponent);
     }
+    return render(container, this._filterComponent.getElement(), RenderPosition.BEFOREEND);
   }
 
   _onFilterChange(filterType) {

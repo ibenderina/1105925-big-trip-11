@@ -6,10 +6,11 @@ import {getRandomElements, getRandomIntegerNumber, mockPhotos} from "../mock/tri
 import {DESCRIPTION, OFFERS, EventsSortMode} from "@consts";
 
 export default class PointController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, onCloseNewEvent) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+    this._onCloseNewEvent = onCloseNewEvent;
 
     this._eventComponent = null;
     this._editComponent = null;
@@ -46,7 +47,10 @@ export default class PointController {
       replace(this._eventComponent, oldEventComponent);
     } else {
       this._mode = trip.id ? this._mode : EventsSortMode.EDIT;
-      this._container.appendChild((trip.id ? this._eventComponent : this._editComponent).getElement());
+      this._container.appendChild(this._eventComponent.getElement());
+      if (this._mode === EventsSortMode.EDIT) {
+        this._replaceTripToEdit();
+      }
     }
   }
 
@@ -58,7 +62,6 @@ export default class PointController {
 
   _onEscKeydown(evt) {
     if (isEscPressed(evt.key)) {
-      document.removeEventListener(`keydown`, this._onEscKeydown);
       this._replaceTripToEvent();
     }
   }
@@ -67,8 +70,7 @@ export default class PointController {
     document.addEventListener(`keydown`, this._onEscKeydown);
     this._onViewChange();
     this._mode = EventsSortMode.EDIT;
-
-    replace(this._editComponent, this._eventComponent);
+    return replace(this._editComponent, this._eventComponent);
   }
 
   _onToggleKeydownEnter(evt) {
@@ -103,7 +105,11 @@ export default class PointController {
   }
 
   _replaceTripToEvent() {
-    replace(this._eventComponent, this._editComponent);
+    document.removeEventListener(`keydown`, this._onEscKeydown);
+    if (this._trip.id) {
+      return replace(this._eventComponent, this._editComponent);
+    }
+    return this._onCloseNewEvent();
   }
 
   _forbidDestination(evt) {
@@ -132,5 +138,6 @@ export default class PointController {
     this._editComponent.setClickFavoriteButtonHandler(this._onDataChange);
     this._editComponent.setInputHandler(this._forbidDestination);
     this._editComponent.setPriceInputHandler(this._changePrice);
+    this._editComponent.setClickCancelButtonHandler(this._replaceTripToEvent);
   }
 }

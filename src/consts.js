@@ -139,3 +139,10 @@ export const FilterType = {
   FUTURE: `future`,
   PAST: `past`
 };
+
+export const HIDDEN_CLASS = `visually-hidden`;
+
+export const MenuItem = {
+  STATISTICS: `stats`,
+  TRIPS: `trips`
+};

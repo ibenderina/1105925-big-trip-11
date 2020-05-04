@@ -19,12 +19,16 @@ export const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-export const getDuration = (time) => {
-  const duration = moment.duration(time.checkout - time.checkin);
+export const formatDuration = (seconds) => {
+  const duration = moment.duration(seconds);
   const days = duration.days() ? `${duration.days()}D` : ``;
   const hours = duration.hours() ? `${duration.hours()}H` : ``;
   const minutes = duration.minutes() ? `${duration.minutes()}M` : ``;
   return `${days} ${hours} ${minutes}`;
+};
+
+export const getDuration = (time) => {
+  return formatDuration(time.checkout - time.checkin);
 };
 
 export const getUniqueTripDates = (events) => {
