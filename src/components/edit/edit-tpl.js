@@ -60,7 +60,7 @@ const createEventsDestinationList = () => {
 };
 
 const createOffers = (offers) => {
-  return offers.map((offer, index) => {
+  return (offers || []).map((offer, index) => {
     const {name, price} = offer;
     return createOffer(name, index, price);
   }).join(``);
@@ -71,6 +71,9 @@ const createDescription = (description) => {
 };
 
 const createEditTemplate = (trip) => {
+  const isFavorites = trip.isFavorites ? `checked` : ``;
+  const isShowOffers = (trip.offers && trip.offers.length) ? `` : `visually-hidden`;
+  const isShowDescription = ((trip.info.description && trip.info.description.length) || (trip.info.photos && trip.info.photos.length)) ? `` : `visually-hidden`;
   return `<form class="trip-events__item  event  event--edit" action="#" method="post">
             <header class="event__header">
               <div class="event__type-wrapper" tabindex="0">
@@ -130,7 +133,7 @@ const createEditTemplate = (trip) => {
               <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
               <button class="event__reset-btn" type="reset">Cancel</button>
 
-              <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked>
+              <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorites}>
               <label class="event__favorite-btn" for="event-favorite-1">
                 <span class="visually-hidden">Add to favorite</span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -143,7 +146,7 @@ const createEditTemplate = (trip) => {
               </button>
             </header>
             <section class="event__details">
-              <section class="event__section  event__section--offers">
+              <section class="event__section  event__section--offers ${isShowOffers}">
                 <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                 <div class="event__available-offers">
@@ -151,7 +154,7 @@ const createEditTemplate = (trip) => {
                 </div>
               </section>
 
-              <section class="event__section  event__section--destination">
+              <section class="event__section  event__section--destination ${isShowDescription}">
                 <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                 ${createDescription(trip.info.description)}
                 <div class="event__photos-container">

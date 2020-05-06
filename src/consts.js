@@ -146,3 +146,10 @@ export const MenuItem = {
   STATISTICS: `stats`,
   TRIPS: `trips`
 };
+
+export const Method = {
+  GET: `GET`,
+  POST: `POST`,
+  PUT: `PUT`,
+  DELETE: `DELETE`
+};

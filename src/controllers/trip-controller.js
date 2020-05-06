@@ -8,7 +8,7 @@ import NoEventsComponent from "@components/no-events/no-events";
 import PointController from "./point-controller";
 import {formatDate, getUniqueTripDates} from "@utils/common";
 import {render} from "@utils/render";
-import {createTripDataElement} from "../mock/trip";
+import {createEmptyTrip} from "../mock/trip";
 import {FilterType, HIDDEN_CLASS, RenderPosition, SortType} from "@consts";
 
 export default class TripController {
@@ -157,7 +157,7 @@ export default class TripController {
       this._updateTrips();
       this._newEventBtn.disabled = true;
       this._onViewChange();
-      const newTrip = createTripDataElement();
+      const newTrip = createEmptyTrip();
       newTrip.id = null;
       const day = this._renderTripDay([newTrip], ``);
       render(this._container.getElement(), day, RenderPosition.AFTERBEGIN);

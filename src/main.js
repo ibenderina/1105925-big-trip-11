@@ -34,6 +34,7 @@ siteMenuComponent.setOnChange((menuItem) => {
   switch (menuItem) {
     case MenuItem.STATISTICS:
       tripController.hide();
+      statisticsComponent.render();
       statisticsComponent.show();
       break;
     case MenuItem.TRIPS:

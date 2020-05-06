@@ -21,10 +21,27 @@ const getRandomElements = (element, min, max) => {
   return element.slice(randomIndex, randomIndex + getRandomIntegerNumber(min, max));
 };
 
+const createEmptyTrip = () => {
+  return {
+    isFavorites: false,
+    targetType: getRandomArrayItem(EVENT_TYPES),
+    destination: ``,
+    offers: null,
+    info: {
+      description: [],
+      photos: []
+    },
+    checkin: new Date(),
+    checkout: new Date(),
+    price: 0
+  };
+};
+
 const createTripDataElement = () => {
   let date = getRandomDate();
   return {
     id: String(new Date() + Math.random()),
+    isFavorites: false,
     targetType: getRandomArrayItem(EVENT_TYPES),
     destination: getRandomArrayItem(EVENT_CITIES),
     offers: getRandomElements(OFFERS, MocksDataCount.EMPTY, MocksDataCount.MAX),
@@ -55,4 +72,4 @@ const getTripData = () => {
   });
 };
 
-export {getRandomElements, getTripData, getRandomIntegerNumber, mockPhotos, createTripDataElement};
+export {getRandomElements, getTripData, getRandomIntegerNumber, mockPhotos, createTripDataElement, createEmptyTrip};

@@ -135,7 +135,9 @@ export default class PointController {
     });
     this._editComponent.setToggleKeydownEnterHandler(this._onToggleKeydownEnter);
     this._editComponent.setChangeEventTypeHandler(this._eventTypeChanger);
-    this._editComponent.setClickFavoriteButtonHandler(this._onDataChange);
+    this._editComponent.setClickFavoriteButtonHandler(() => {
+      this._trip.isFavorites = !this._trip.isFavorites;
+    });
     this._editComponent.setInputHandler(this._forbidDestination);
     this._editComponent.setPriceInputHandler(this._changePrice);
     this._editComponent.setClickCancelButtonHandler(this._replaceTripToEvent);
