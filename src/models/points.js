@@ -52,7 +52,6 @@ export default class Points {
   }
 
   addTrip(trip) {
-    trip.id = String(new Date()) + Math.random();
     this._trips = [].concat(trip, this._trips);
     this._callHandlers(this._dataChangeHandlers);
     return true;

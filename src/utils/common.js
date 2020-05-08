@@ -1,5 +1,5 @@
-import moment from "moment";
 import {Key} from "@consts";
+import moment from "moment";
 import flatpickr from "flatpickr";
 
 export const editTripTime = (element, minDate, onChange) => {

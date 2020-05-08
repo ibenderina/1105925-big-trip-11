@@ -1,5 +1,5 @@
-import FiltersComponent from "@components/filters/filters";
 import {render, replace} from "@utils/render";
+import FiltersComponent from "@components/filters/filters";
 import {FilterType, RenderPosition} from "@consts";
 
 export default class FilterController {

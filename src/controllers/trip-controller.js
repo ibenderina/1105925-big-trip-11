@@ -1,3 +1,5 @@
+import {formatDate, getUniqueTripDates} from "@utils/common";
+import {render} from "@utils/render";
 import DayComponent from "@components/day/day";
 import EventsComponent from "@components/events/events";
 import EventsItemComponent from "@components/events-item/events-item";
@@ -6,15 +8,16 @@ import TripInfoComponent from "@components/info/info";
 import CostComponent from "@components/cost/cost";
 import NoEventsComponent from "@components/no-events/no-events";
 import PointController from "./point-controller";
-import {formatDate, getUniqueTripDates} from "@utils/common";
-import {render} from "@utils/render";
-import {createEmptyTrip} from "../mock/trip";
+import PointModel from "@models/point";
 import {FilterType, HIDDEN_CLASS, RenderPosition, SortType} from "@consts";
 
 export default class TripController {
-  constructor(container, pointsModel) {
+  constructor(container, modelPoints, modelDestinations, modelOffers, api) {
     this._container = container;
-    this._modelPoints = pointsModel;
+    this._modelPoints = modelPoints;
+    this._modelDestinations = modelDestinations;
+    this._modelOffers = modelOffers;
+    this._api = api;
 
     this._showedEventComponents = [];
 
@@ -29,6 +32,7 @@ export default class TripController {
     this._changeSortType = this._changeSortType.bind(this);
     this._updateTrips = this._updateTrips.bind(this);
     this._onCloseNewEvent = this._onCloseNewEvent.bind(this);
+    this._updateModelPoints = this._updateModelPoints.bind(this);
 
     this._modelPoints.setFilterChangeHandler(this._updateTrips);
 
@@ -60,8 +64,7 @@ export default class TripController {
     this._newEventBtn.disabled = false;
   }
 
-  _onDataChange(pointController, oldData, newData) {
-    this._newEventBtn.disabled = false;
+  _updateModelPoints(pointController, oldData, newData) {
     const isSuccess = newData.id ? this._modelPoints.updateTrip(oldData.id, newData) : this._modelPoints.addTrip(newData);
     if (isSuccess) {
       if (pointController) {
@@ -70,6 +73,20 @@ export default class TripController {
       this._updateTrips();
     }
     return null;
+  }
+
+  _onDataChange(pointController, oldData, newData) {
+    this._newEventBtn.disabled = false;
+    const updateModelPointFunc = (point) => {
+      this._updateModelPoints(pointController, oldData, (point || newData));
+    };
+    if (pointController) {
+      return updateModelPointFunc();
+    }
+    if (newData.id) {
+      return this._api.updatePoint(newData, this._modelOffers).then(updateModelPointFunc);
+    }
+    return this._api.createPoint(newData, this._modelOffers).then(updateModelPointFunc);
   }
 
   _renderTripDays(tripDaysElement, trips) {
@@ -110,7 +127,9 @@ export default class TripController {
     const eventsElement = new EventsComponent(trips).getElement();
     trips.forEach((trip) => {
       const eventList = new EventsItemComponent().getElement();
-      const pointController = new PointController(eventList, this._onDataChange, this._onViewChange, closeNewEventHandler);
+      const pointController = new PointController(
+          eventList, this._modelDestinations, this._modelOffers, this._onDataChange, this._onViewChange, closeNewEventHandler
+      );
       pointController.render(trip);
       eventsElement.appendChild(eventList);
       this._showedEventComponents.push(pointController);
@@ -157,8 +176,7 @@ export default class TripController {
       this._updateTrips();
       this._newEventBtn.disabled = true;
       this._onViewChange();
-      const newTrip = createEmptyTrip();
-      newTrip.id = null;
+      const newTrip = new PointModel();
       const day = this._renderTripDay([newTrip], ``);
       render(this._container.getElement(), day, RenderPosition.AFTERBEGIN);
     });

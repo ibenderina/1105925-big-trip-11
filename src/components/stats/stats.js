@@ -4,7 +4,8 @@ import {createStatsTemplate, moneyChart, transportChart, timeChart} from "../sta
 export default class Stats extends AbstractComponent {
   constructor(modelPoints) {
     super();
-    this.__modelPoints = modelPoints;
+    this._modelPoints = modelPoints;
+    this._charts = [];
   }
 
   getTemplate() {
@@ -26,18 +27,21 @@ export default class Stats extends AbstractComponent {
   }
 
   render() {
-    [this._moneyCtx, this._transportCtx, this._timeSpendCtx].forEach((element) => {
-      const context = element.getContext(`2d`);
-      context.clearRect(0, 0, context.width, context.height);
-    });
+    if (this._charts.length) {
+      this._charts.forEach((chart) => {
+        chart.destroy();
+      });
+    }
 
-    moneyChart(this._moneyCtx, this._renderMoneyChart());
-    transportChart(this._transportCtx, this._renderTransportChart());
-    timeChart(this._timeSpendCtx, this._renderTimeChart());
+    this._charts = [
+      moneyChart(this._moneyCtx, this._renderMoneyChart()),
+      transportChart(this._transportCtx, this._renderTransportChart()),
+      timeChart(this._timeSpendCtx, this._renderTimeChart())
+    ];
   }
 
   _getChartData(callback) {
-    const trips = this.__modelPoints.getTrips();
+    const trips = this._modelPoints.getTrips();
     return Array.from(trips.reduce((groupedTrips, trip) => {
       const targetTypeName = trip.targetType.name.toUpperCase();
       if (!groupedTrips.has(targetTypeName)) {
