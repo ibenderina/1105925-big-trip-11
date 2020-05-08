@@ -7,6 +7,7 @@ import SortComponent from "@components/sort/sort";
 import TripInfoComponent from "@components/info/info";
 import CostComponent from "@components/cost/cost";
 import NoEventsComponent from "@components/no-events/no-events";
+import LoadComponent from "@components/load/load";
 import PointController from "./point-controller";
 import PointModel from "@models/point";
 import {FilterType, HIDDEN_CLASS, RenderPosition, SortType} from "@consts";
@@ -26,6 +27,7 @@ export default class TripController {
     this._tripMain = document.querySelector(`.trip-main`);
     this._newEventBtn = document.querySelector(`.trip-main__event-add-btn`);
     this._noEvent = new NoEventsComponent();
+    this._Load = new LoadComponent();
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
@@ -39,6 +41,7 @@ export default class TripController {
     this._addNewEventHandler();
     this._sortComponent.setSortTypeChangeHandler(this._changeSortType);
     this._modelPoints.setFilterChangeHandler(this._sortComponent.resetSortType);
+    render(this._tripEvents, this._Load.getElement(), RenderPosition.BEFOREEND);
   }
 
   hide() {
@@ -50,6 +53,7 @@ export default class TripController {
   }
 
   render() {
+    this._Load.removeElement();
     const trips = this._modelPoints.getTrips();
     if (!trips.length) {
       render(this._tripEvents, this._noEvent.getElement(), RenderPosition.BEFOREEND);
