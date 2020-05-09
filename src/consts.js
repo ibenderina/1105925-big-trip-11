@@ -4,6 +4,7 @@ export const ACTIVITY = `in`;
 
 export const EVENT_TYPES = {
   ACTIVE: [`Check-in`, `Sightseeing`, `Restaurant`],
+  TRANSFER: [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`],
   DEFAULT: `taxi`
 };
 

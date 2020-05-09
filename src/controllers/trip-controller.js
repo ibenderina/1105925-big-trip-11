@@ -53,7 +53,7 @@ export default class TripController {
   }
 
   render() {
-    this._Load.removeElement();
+    this._Load.hide();
     const trips = this._modelPoints.getTrips();
     if (!trips.length) {
       render(this._tripEvents, this._noEvent.getElement(), RenderPosition.BEFOREEND);

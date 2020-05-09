@@ -44,11 +44,9 @@ const createDescriptionTemplate = (text) => {
 };
 
 const createEventTypeList = (trip, eventType) => {
-  return EVENT_TYPES.map((item, index) => {
-    if (item.type === eventType) {
-      return createEventType(index, item.name, eventType);
-    }
-    return ``;
+  const eventTypes = eventType === TRANSFER ? EVENT_TYPES.TRANSFER : EVENT_TYPES.ACTIVE;
+  return eventTypes.map((item, index) => {
+    return createEventType(index, item, eventType);
   }).join(``);
 };
 
