@@ -40,4 +40,8 @@ export class Provider {
       return new PointModel(_point, offers.findOffers(_point[`type`]));
     });
   }
+
+  deletePoint(point) {
+    return this._api.deletePoint(point);
+  }
 }

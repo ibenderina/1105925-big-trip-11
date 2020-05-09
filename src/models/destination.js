@@ -1,8 +1,13 @@
 export default class Destination {
   constructor(data) {
-    this.description = data.description;
-    this.name = data.name;
-    this.photos = data.pictures;
+    this.description = ``;
+    this.name = ``;
+    this.photos = [];
+    if (data) {
+      this.description = data.description;
+      this.name = data.name;
+      this.photos = data.pictures;
+    }
   }
 
   toRAW() {

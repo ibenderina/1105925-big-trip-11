@@ -69,28 +69,38 @@ export default class TripController {
   }
 
   _updateModelPoints(pointController, oldData, newData) {
-    const isSuccess = newData.id ? this._modelPoints.updateTrip(oldData.id, newData) : this._modelPoints.addTrip(newData);
+    if (!newData) {
+      this._modelPoints.removeTrip(oldData);
+      return this._updateTrips();
+    }
+    const isSuccess = newData.id ? this._modelPoints.updateTrip(oldData, newData) : this._modelPoints.addTrip(newData);
     if (isSuccess) {
       if (pointController) {
         return pointController.render(newData);
       }
-      this._updateTrips();
+      return this._updateTrips();
     }
     return null;
   }
 
   _onDataChange(pointController, oldData, newData) {
     this._newEventBtn.disabled = false;
-    const updateModelPointFunc = (point) => {
-      this._updateModelPoints(pointController, oldData, (point || newData));
+    const updateModelPoint = (point) => {
+      return this._updateModelPoints(pointController, oldData, (point || newData));
     };
     if (pointController) {
-      return updateModelPointFunc();
+      return new Promise((resolve) => {
+        resolve(updateModelPoint());
+      });
     }
-    if (newData.id) {
-      return this._api.updatePoint(newData, this._modelOffers).then(updateModelPointFunc);
+    if (!newData) {
+      return this._api.deletePoint(oldData).then(updateModelPoint);
+    } else if (newData.id) {
+      return this._api.updatePoint(newData, this._modelOffers).then(updateModelPoint);
+    } else if (!newData.id) {
+      return this._api.createPoint(newData, this._modelOffers).then(updateModelPoint);
     }
-    return this._api.createPoint(newData, this._modelOffers).then(updateModelPointFunc);
+    return null;
   }
 
   _renderTripDays(tripDaysElement, trips) {
