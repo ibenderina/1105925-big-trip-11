@@ -56,7 +56,9 @@ export default class Points {
   }
 
   addTrip(trip) {
-    this._trips = [].concat(trip, this._trips);
+    this._trips = [].concat(trip, this._trips.filter((_trip) => {
+      return _trip.id;
+    }));
     this._callHandlers(this._dataChangeHandlers);
     return true;
   }

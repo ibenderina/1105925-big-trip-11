@@ -68,3 +68,10 @@ export const ChartTitle = {
   TRANSPORT: `TRANSPORT`,
   TIME_SPENT: `TIME SPENT`
 };
+
+export const LOCAL_STORE_KEYS = {
+  POINTS: `points`,
+  REMOVED_POINTS: `removed-points`,
+  OFFERS: `offers`,
+  DESTINATIONS: `destinations`
+};

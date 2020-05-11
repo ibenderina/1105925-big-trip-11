@@ -1,3 +1,6 @@
+import PointModel from "@models/point";
+import OfferModel from "@models/offer";
+import DestinationModel from "@models/destination";
 import {Method} from "@consts";
 
 export class Api {
@@ -9,7 +12,7 @@ export class Api {
     };
   }
 
-  updatePoint(point) {
+  updatePoint(point, offers) {
     return fetch(`${this._baseURL}/points/${point.id}`, {
       method: Method.PUT,
       body: JSON.stringify(point.toRAW()),
@@ -19,10 +22,12 @@ export class Api {
         return response.json();
       }
       throw new Error(`error`);
+    }).then((_point) => {
+      return new PointModel(_point, offers.findOffers(_point[`type`]));
     });
   }
 
-  createPoint(point) {
+  createPoint(point, offers) {
     return fetch(`${this._baseURL}/points`, {
       method: Method.POST,
       body: JSON.stringify(point.toRAW()),
@@ -32,19 +37,27 @@ export class Api {
         return response.json();
       }
       throw new Error(`error`);
+    }).then((_point) => {
+      return new PointModel(_point, offers.findOffers(_point[`type`]));
     });
   }
 
   getDestinations() {
-    return this._load(`destinations`);
+    return this._load(`destinations`).then((destinations) => {
+      return DestinationModel.parseMany(destinations);
+    });
   }
 
   getOffers() {
-    return this._load(`offers`);
+    return this._load(`offers`).then((offers) => {
+      return OfferModel.parseMany(offers);
+    });
   }
 
-  getPoints() {
-    return this._load(`points`);
+  getPoints(offers) {
+    return this._load(`points`).then((points) => {
+      return PointModel.parseMany(points, offers);
+    });
   }
 
   deletePoint(point) {
@@ -67,5 +80,19 @@ export class Api {
       }
       throw new Error(`target not found`);
     });
+  }
+
+  sync(updatedPoints, removedPoints) {
+    removedPoints.forEach((pointId) => {
+      return this.deletePoint({id: pointId});
+    });
+    updatedPoints.forEach((point) => {
+      return fetch(`${this._baseURL}/points/${point.id || ``}`, {
+        method: point.id ? Method.PUT : Method.POST,
+        body: JSON.stringify(point),
+        headers: this._headers
+      }).then((response) => response.json());
+    });
+    return Promise.resolve();
   }
 }

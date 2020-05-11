@@ -55,9 +55,11 @@ export default class TripController {
   render() {
     this._Load.hide();
     const trips = this._modelPoints.getTrips();
+    const noEvents = this._noEvent.getElement();
     if (!trips.length) {
-      render(this._tripEvents, this._noEvent.getElement(), RenderPosition.BEFOREEND);
+      render(this._tripEvents, noEvents, RenderPosition.BEFOREEND);
     } else {
+      this._noEvent.removeElement();
       this._renderTripInfo();
       render(this._tripEvents, this._sortComponent.getElement(), RenderPosition.BEFOREEND);
       render(this._tripEvents, this._container.getElement(), RenderPosition.BEFOREEND);
@@ -89,9 +91,7 @@ export default class TripController {
       return this._updateModelPoints(pointController, oldData, (point || newData));
     };
     if (pointController) {
-      return new Promise((resolve) => {
-        resolve(updateModelPoint());
-      });
+      return Promise.resolve(updateModelPoint());
     }
     if (!newData) {
       return this._api.deletePoint(oldData).then(updateModelPoint);
@@ -191,8 +191,10 @@ export default class TripController {
       this._newEventBtn.disabled = true;
       this._onViewChange();
       const newTrip = new PointModel();
-      const day = this._renderTripDay([newTrip], ``);
-      render(this._container.getElement(), day, RenderPosition.AFTERBEGIN);
+      this._modelPoints.addTrip(newTrip);
+      this._updateTrips();
+      // const day = this._renderTripDay([newTrip], ``);
+      // render(this._container.getElement(), day, RenderPosition.AFTERBEGIN);
     });
   }
 }
