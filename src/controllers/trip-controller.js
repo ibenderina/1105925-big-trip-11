@@ -27,7 +27,7 @@ export default class TripController {
     this._tripMain = document.querySelector(`.trip-main`);
     this._newEventBtn = document.querySelector(`.trip-main__event-add-btn`);
     this._noEvent = new NoEventsComponent();
-    this._Load = new LoadComponent();
+    this._load = new LoadComponent();
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
@@ -41,7 +41,7 @@ export default class TripController {
     this._addNewEventHandler();
     this._sortComponent.setSortTypeChangeHandler(this._changeSortType);
     this._modelPoints.setFilterChangeHandler(this._sortComponent.resetSortType);
-    render(this._tripEvents, this._Load.getElement(), RenderPosition.BEFOREEND);
+    render(this._tripEvents, this._load.getElement(), RenderPosition.BEFOREEND);
   }
 
   hide() {
@@ -53,7 +53,7 @@ export default class TripController {
   }
 
   render() {
-    this._Load.hide();
+    this._load.hide();
     const trips = this._modelPoints.getTrips();
     const noEvents = this._noEvent.getElement();
     if (!trips.length) {
