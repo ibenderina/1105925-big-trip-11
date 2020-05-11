@@ -1,5 +1,5 @@
-import {TRANSFER, ACTIVITY, EVENT_TYPES, EVENT_CITIES} from "@consts";
-import {formatDate, formatTime} from "@utils/common";
+import {formatDate, formatTime, capitalize} from "@utils/common";
+import {TRANSFER, ACTIVITY, EVENT_TYPES} from "@consts";
 
 const createEventType = (index, value, t) => {
   const lowerCase = value.toLowerCase();
@@ -15,21 +15,26 @@ const createEventType = (index, value, t) => {
 };
 
 const createEventPhoto = (value) => {
-  return `<img class="event__photo" src="${value}" alt="Event photo">`;
+  return `<img class="event__photo" src="${value.src}" alt="${value.description}">`;
 };
 
 const createEventDestination = (value) => {
   return `<option value="${value}"></option>`;
 };
 
-const createOffer = (value, index, price) => {
-  const lowerCaseTrim = value.toLowerCase().trim();
+const createOffer = (offer) => {
+  const lowerCaseTrim = offer.name.toLowerCase().trim();
+  const isChecked = offer.isChecked ? `checked` : ``;
   return `<div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${lowerCaseTrim}-${index}" type="checkbox" name="event-offer-${lowerCaseTrim}">
-            <label class="event__offer-label" for="event-offer-${lowerCaseTrim}-${index}">
-              <span class="event__offer-title">${value}</span>
+            <input class="event__offer-checkbox  visually-hidden"
+                   id="${lowerCaseTrim}"
+                   type="checkbox"
+                   name="${lowerCaseTrim}"
+                   ${isChecked}>
+            <label class="event__offer-label" for="${lowerCaseTrim}">
+              <span class="event__offer-title">${offer.name}</span>
               &plus;
-              &euro;&nbsp;<span class="event__offer-price">${price}</span>
+              &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
             </label>
           </div>`;
 };
@@ -39,11 +44,9 @@ const createDescriptionTemplate = (text) => {
 };
 
 const createEventTypeList = (trip, eventType) => {
-  return EVENT_TYPES.map((item, index) => {
-    if (item.type === eventType) {
-      return createEventType(index, item.name, eventType);
-    }
-    return ``;
+  const eventTypes = eventType === TRANSFER ? EVENT_TYPES.TRANSFER : EVENT_TYPES.ACTIVE;
+  return eventTypes.map((item, index) => {
+    return createEventType(index, item, eventType);
   }).join(``);
 };
 
@@ -53,24 +56,22 @@ const createEventPhotosList = (photos) => {
   }).join(``);
 };
 
-const createEventsDestinationList = () => {
-  return EVENT_CITIES.map((value) => {
-    return createEventDestination(value);
+const createEventsDestinationList = (destinations) => {
+  return destinations.map((destination) => {
+    return createEventDestination(destination.name);
   }).join(``);
 };
 
 const createOffers = (offers) => {
-  return offers.map((offer, index) => {
-    const {name, price} = offer;
-    return createOffer(name, index, price);
+  return (offers || []).map((offer) => {
+    return createOffer(offer);
   }).join(``);
 };
 
-const createDescription = (description) => {
-  return createDescriptionTemplate(description.join(` `));
-};
-
-const createEditTemplate = (trip) => {
+const createEditTemplate = (trip, availableDestinations) => {
+  const isFavorites = trip.isFavorites ? `checked` : ``;
+  const isShowOffers = (trip.offers && trip.offers.length) ? `` : `visually-hidden`;
+  const isShowDescription = ((trip.info.description && trip.info.description.length) || (trip.info.photos && trip.info.photos.length)) ? `` : `visually-hidden`;
   return `<form class="trip-events__item  event  event--edit" action="#" method="post">
             <header class="event__header">
               <div class="event__type-wrapper" tabindex="0">
@@ -99,11 +100,11 @@ const createEditTemplate = (trip) => {
 
               <div class="event__field-group  event__field-group--destination">
                 <label class="event__label  event__type-output" for="event-destination-1">
-                  ${trip.targetType.name} ${trip.targetType.type}
+                  ${capitalize(trip.targetType.name)} ${trip.targetType.type}
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${trip.destination}" list="destination-list-1">
                 <datalist id="destination-list-1">
-                  ${createEventsDestinationList()}
+                  ${createEventsDestinationList(availableDestinations)}
                 </datalist>
               </div>
 
@@ -130,7 +131,7 @@ const createEditTemplate = (trip) => {
               <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
               <button class="event__reset-btn" type="reset">Cancel</button>
 
-              <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked>
+              <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorites}>
               <label class="event__favorite-btn" for="event-favorite-1">
                 <span class="visually-hidden">Add to favorite</span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -143,7 +144,7 @@ const createEditTemplate = (trip) => {
               </button>
             </header>
             <section class="event__details">
-              <section class="event__section  event__section--offers">
+              <section class="event__section  event__section--offers ${isShowOffers}">
                 <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                 <div class="event__available-offers">
@@ -151,9 +152,9 @@ const createEditTemplate = (trip) => {
                 </div>
               </section>
 
-              <section class="event__section  event__section--destination">
+              <section class="event__section  event__section--destination ${isShowDescription}">
                 <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                ${createDescription(trip.info.description)}
+                ${createDescriptionTemplate(trip.info.description)}
                 <div class="event__photos-container">
                   <div class="event__photos-tape">
                     ${createEventPhotosList(trip.info.photos)}

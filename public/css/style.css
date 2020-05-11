@@ -399,8 +399,13 @@ main {
   text-align: center;
   color: #ffffff;
   opacity: 0.89; }
-  .trip-events__msg--hidden {
-    display: none; }
+
+.trip-events__msg--black {
+  color: #222222;
+}
+
+.trip-events__msg--hidden {
+  display: none; }
 
 .trip-events__list {
   padding: 0;

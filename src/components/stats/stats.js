@@ -1,11 +1,11 @@
 import AbstractComponent from "@abstract";
 import {createStatsTemplate, moneyChart, transportChart, timeChart} from "../stats/stats-tpl";
-import {FilterType} from "@consts";
 
 export default class Stats extends AbstractComponent {
   constructor(modelPoints) {
     super();
-    this.__modelPoints = modelPoints;
+    this._modelPoints = modelPoints;
+    this._charts = [];
   }
 
   getTemplate() {
@@ -13,25 +13,35 @@ export default class Stats extends AbstractComponent {
   }
 
   getElement() {
-    const container = super.getElement();
-    const moneyCtx = container.querySelector(`.statistics__chart--money`);
-    const transportCtx = container.querySelector(`.statistics__chart--transport`);
-    const timeSpendCtx = container.querySelector(`.statistics__chart--time`);
+    super.getElement();
+    this._moneyCtx = this._element.querySelector(`.statistics__chart--money`);
+    this._transportCtx = this._element.querySelector(`.statistics__chart--transport`);
+    this._timeSpendCtx = this._element.querySelector(`.statistics__chart--time`);
 
     const BAR_HEIGHT = 55;
-    moneyCtx.height = BAR_HEIGHT * 6;
-    transportCtx.height = BAR_HEIGHT * 4;
-    timeSpendCtx.height = BAR_HEIGHT * 4;
+    this._moneyCtx.height = BAR_HEIGHT * 6;
+    this._transportCtx.height = BAR_HEIGHT * 6;
+    this._timeSpendCtx.height = BAR_HEIGHT * 6;
 
-    moneyChart(moneyCtx, this._renderMoneyChart());
-    transportChart(transportCtx, this._renderTransportChart());
-    timeChart(timeSpendCtx, this._renderTimeChart());
+    return this._element;
+  }
 
-    return container;
+  render() {
+    if (this._charts.length) {
+      this._charts.forEach((chart) => {
+        chart.destroy();
+      });
+    }
+
+    this._charts = [
+      moneyChart(this._moneyCtx, this._renderMoneyChart()),
+      transportChart(this._transportCtx, this._renderTransportChart()),
+      timeChart(this._timeSpendCtx, this._renderTimeChart())
+    ];
   }
 
   _getChartData(callback) {
-    const trips = this.__modelPoints.getTrips();
+    const trips = this._modelPoints.getTrips();
     return Array.from(trips.reduce((groupedTrips, trip) => {
       const targetTypeName = trip.targetType.name.toUpperCase();
       if (!groupedTrips.has(targetTypeName)) {
