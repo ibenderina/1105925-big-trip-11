@@ -47,6 +47,17 @@ export class Api {
     return this._load(`points`);
   }
 
+  deletePoint(point) {
+    return fetch(`${this._baseURL}/points/${point.id}`, {
+      method: Method.DELETE,
+      headers: this._headers
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(`error`);
+      }
+    });
+  }
+
   _load(target) {
     return fetch(`${this._baseURL}/${target}`, {
       headers: this._headers

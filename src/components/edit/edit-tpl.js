@@ -68,7 +68,19 @@ const createOffers = (offers) => {
   }).join(``);
 };
 
+const createExitButton = (isExistedEvent) => {
+  const [btnType, text, alt] = isExistedEvent ? [`delete`, `Delete`, `Deleting...`] : [`reset`, `Cancel`, `Cancel`];
+  return `<button class="event__reset-btn" type="${btnType}" data-alt="${alt}">${text}</button>`;
+};
+
+const createRollupButton = (isShowed) => {
+  return isShowed ? `<button class="event__rollup-btn" type="button">
+  <span class="visually-hidden">Open event</span>
+  </button>` : ``;
+};
+
 const createEditTemplate = (trip, availableDestinations) => {
+  const exitButton = createExitButton(trip.id);
   const isFavorites = trip.isFavorites ? `checked` : ``;
   const isShowOffers = (trip.offers && trip.offers.length) ? `` : `visually-hidden`;
   const isShowDescription = ((trip.info.description && trip.info.description.length) || (trip.info.photos && trip.info.photos.length)) ? `` : `visually-hidden`;
@@ -128,8 +140,8 @@ const createEditTemplate = (trip, availableDestinations) => {
                 <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${trip.price}" min="0">
               </div>
 
-              <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-              <button class="event__reset-btn" type="reset">Cancel</button>
+              <button class="event__save-btn  btn  btn--blue" type="submit" data-alt="Saving...">Save</button>
+              ${exitButton}
 
               <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorites}>
               <label class="event__favorite-btn" for="event-favorite-1">
@@ -139,9 +151,7 @@ const createEditTemplate = (trip, availableDestinations) => {
                 </svg>
               </label>
 
-              <button class="event__rollup-btn" type="button">
-                <span class="visually-hidden">Open event</span>
-              </button>
+              ${createRollupButton(trip.id)}
             </header>
             <section class="event__details">
               <section class="event__section  event__section--offers ${isShowOffers}">

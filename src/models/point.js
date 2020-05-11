@@ -11,10 +11,7 @@ export default class Point {
     };
     this.destination = ``;
     this.offers = [];
-    this.info = {
-      description: ``,
-      photos: []
-    };
+    this.info = new Destination();
     this.checkin = new Date();
     this.checkout = new Date();
     this.price = 0;

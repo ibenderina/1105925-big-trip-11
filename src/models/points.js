@@ -23,8 +23,10 @@ export default class Points {
     this._callHandlers(this._filterChangeHandlers);
   }
 
-  removeTrip(id) {
-    const index = this._trips.findIndex((it) => it.id === id);
+  removeTrip(trip) {
+    const index = this._trips.findIndex((it) => {
+      return it.id === trip.id;
+    });
 
     if (index === -1) {
       return false;
@@ -37,8 +39,10 @@ export default class Points {
     return true;
   }
 
-  updateTrip(id, trip) {
-    const index = this._trips.findIndex((it) => it.id === id);
+  updateTrip(oldTrip, trip) {
+    const index = this._trips.findIndex((it) => {
+      return it.id === oldTrip.id;
+    });
 
     if (index === -1) {
       return false;

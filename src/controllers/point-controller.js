@@ -26,6 +26,7 @@ export default class PointController {
     this._onToggleKeydownEnter = this._onToggleKeydownEnter.bind(this);
     this._eventTypeChanger = this._eventTypeChanger.bind(this);
     this._destinationChanger = this._destinationChanger.bind(this);
+    this._rollup = this._rollup.bind(this);
   }
 
   destroy() {
@@ -46,7 +47,7 @@ export default class PointController {
     this._eventComponent = new EventComponent(trip);
     this._editComponent = new EditComponent(trip, this._modelDestinations.getDestinations());
 
-    this._eventComponent.setClickButtonHandler(this._replaceTripToEdit);
+    this._eventComponent.setClickRollupButtonHandler(this._replaceTripToEdit);
 
     if (oldEditComponent && oldEventComponent) {
       replace(this._editComponent, oldEditComponent);
@@ -65,6 +66,11 @@ export default class PointController {
     if (this._mode !== EventsSortMode.DEFAULT) {
       this._replaceTripToEvent();
     }
+  }
+
+  _rollup() {
+    return this._onDataChange(this, this._trip, this._sourceTrip)
+      .then(this._replaceTripToEvent);
   }
 
   _forbidDestination(evt) {
@@ -132,12 +138,22 @@ export default class PointController {
 
   _setEventEditListeners() {
     this._editComponent.setChangeDestinationHandler(this._destinationChanger);
-    this._editComponent.setClickButtonHandler(this._replaceTripToEvent);
+
+    this._editComponent.setClickRollupButtonHandler(this._rollup);
+    this._editComponent.setClickCancelButtonHandler(this._replaceTripToEvent);
+    this._editComponent.setClickDeleteButtonHandler((evt) => {
+      return this._onDataChange(null, this._trip, null).then(() => {
+        this._replaceTripToEvent(evt);
+      });
+    });
     this._editComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(null, this._trip, Object.assign(new PointModel(), this._trip, this._editComponent.getData()));
-      this._replaceTripToEvent();
-      document.removeEventListener(`keydown`, this._onEscKeydown);
+      return this._onDataChange(
+          null, this._trip, Object.assign(new PointModel(), this._trip, this._editComponent.getData())
+      ).then(() => {
+        this._replaceTripToEvent();
+        document.removeEventListener(`keydown`, this._onEscKeydown);
+      });
     });
     this._editComponent.setToggleKeydownEnterHandler(this._onToggleKeydownEnter);
     this._editComponent.setChangeEventTypeHandler(this._eventTypeChanger);
@@ -146,10 +162,7 @@ export default class PointController {
     });
     this._editComponent.setInputHandler(this._forbidDestination);
     this._editComponent.setPriceInputHandler(this._changePrice);
-    this._editComponent.setClickCancelButtonHandler((evt) => {
-      this._onDataChange(null, this._trip, this._sourceTrip);
-      this._replaceTripToEvent(evt);
-    });
+
     this._editComponent.setCheckOfferHandler((evt) => {
       const isChecked = evt.target.checked;
       const name = evt.target.name;

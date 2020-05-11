@@ -9,6 +9,7 @@ export default class Edit extends AbstractSmartComponent {
     super();
     this._trip = trip;
     this._availableDestinations = availableDestinations;
+    this._disableForm = this._disableForm.bind(this);
   }
 
   getTemplate() {
@@ -17,13 +18,11 @@ export default class Edit extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement();
-    const formData = new FormData(form);
-
     return {
-      destination: formData.get(`event-destination`),
-      checkin: new Date(moment(formData.get(`event-start-time`), `DD/MM/YYYY hh:mm`)),
-      checkout: new Date(moment(formData.get(`event-end-time`), `DD/MM/YYYY hh:mm`)),
-      price: parseInt(formData.get(`event-price`), 10)
+      destination: form.querySelector(`[name="event-destination"]`).value,
+      checkin: new Date(moment(form.querySelector(`[name="event-start-time"]`).value, `DD/MM/YYYY hh:mm`)),
+      checkout: new Date(moment(form.querySelector(`[name="event-end-time"]`).value, `DD/MM/YYYY hh:mm`)),
+      price: parseInt(form.querySelector(`[name="event-price"]`).value, 10)
     };
   }
 
@@ -40,7 +39,16 @@ export default class Edit extends AbstractSmartComponent {
     });
 
     editTripTime(dateEndElement, this._trip.checkin);
+    this._element.addEventListener(`click`, () => {
+      this._element.classList.remove(`shake`);
+    });
     return this._element;
+  }
+
+  _disableForm(disabled) {
+    this._element.querySelectorAll(`input`, `button`).forEach((el) => {
+      el.disabled = disabled;
+    });
   }
 
   setChangeEventTypeHandler(handler) {
@@ -63,15 +71,45 @@ export default class Edit extends AbstractSmartComponent {
         .addEventListener(`keydown`, handler);
   }
 
-  setClickButtonHandler(handler) {
-    this.getElement()
-        .querySelector(`.event__rollup-btn`)
-        .addEventListener(`click`, handler);
+  setClickRollupButtonHandler(handler) {
+    const element = this.getElement().querySelector(`.event__rollup-btn`);
+    if (element) {
+      element.addEventListener(`click`, handler);
+    }
   }
 
   setSubmitHandler(handler) {
     this.getElement()
-        .addEventListener(`submit`, handler);
+      .addEventListener(`submit`, (evt) => {
+        evt.preventDefault();
+        const btn = evt.target.querySelector(`.event__save-btn`);
+        const text = btn.textContent;
+        btn.textContent = btn.dataset.alt;
+        this._disableForm(true);
+        handler(evt).catch(() => {
+          btn.textContent = text;
+          this._disableForm(false);
+          this._element.classList.add(`shake`);
+        });
+      });
+  }
+
+  setClickDeleteButtonHandler(handler) {
+    const element = this.getElement().querySelector(`.event__reset-btn[type="delete"]`);
+    if (element) {
+      element.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        const btn = evt.target;
+        const text = btn.textContent;
+        btn.textContent = btn.dataset.alt;
+        this._disableForm(true);
+        handler(evt).catch(() => {
+          btn.textContent = text;
+          this._disableForm(false);
+          this._element.classList.add(`shake`);
+        });
+      });
+    }
   }
 
   setClickFavoriteButtonHandler(handler) {
@@ -93,9 +131,10 @@ export default class Edit extends AbstractSmartComponent {
   }
 
   setClickCancelButtonHandler(handler) {
-    this.getElement()
-        .querySelector(`.event__reset-btn`)
-        .addEventListener(`click`, handler);
+    const element = this.getElement().querySelector(`.event__reset-btn[type="reset"]`);
+    if (element) {
+      element.addEventListener(`click`, handler);
+    }
   }
 
   setCheckOfferHandler(handler) {
