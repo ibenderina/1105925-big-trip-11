@@ -1,7 +1,12 @@
 import {formatDuration} from '@utils/common';
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {ChartTitle} from "@consts";
+
+const ChartTitle = {
+  MONEY: `MONEY`,
+  TRANSPORT: `TRANSPORT`,
+  TIME_SPENT: `TIME SPENT`
+};
 
 const createChartTemplate = (ctx, data, formatter, title) => {
   return new Chart(ctx, {

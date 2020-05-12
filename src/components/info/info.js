@@ -12,7 +12,7 @@ export default class Info extends AbstractComponent {
   getTemplate() {
     let datesOfTrip = [this._datesOfTrip[0], this._datesOfTrip[this._datesOfTrip.length - 1]];
 
-    let destinations = [];
+    let destinations = this._destinations;
     if (this._destinations.length > DataCount.MAX_SHOWN_DESTINATIONS) {
       destinations = [this._destinations[0], `...`, this._destinations[this._destinations.length - 1]];
     }

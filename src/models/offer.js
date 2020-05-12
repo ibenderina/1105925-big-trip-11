@@ -1,8 +1,13 @@
 export default class Offer {
   constructor(data) {
-    this.name = data.title;
-    this.price = data.price;
+    this.name = ``;
+    this.price = 0;
     this.isChecked = false;
+    if (data) {
+      this.name = data.title;
+      this.price = data.price;
+      this.isChecked = false;
+    }
   }
 
   toRAW() {
@@ -12,9 +17,17 @@ export default class Offer {
     };
   }
 
-  static parseMany(offers) {
+  static parseOffersList(offers) {
     return offers.map((offer) => {
       return new Offer(offer);
     });
+  }
+
+  static parse(rawOffers) {
+    const offers = {};
+    rawOffers.forEach((typeOffers) => {
+      offers[typeOffers[`type`]] = Offer.parseOffersList(typeOffers[`offers`]);
+    });
+    return offers;
   }
 }

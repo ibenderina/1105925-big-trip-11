@@ -1,5 +1,6 @@
 import Destination from "@models/destination";
 import {ACTIVITY, TRANSFER, EVENT_TYPES} from "@consts";
+import Offer from "@models/offer";
 
 export default class Point {
   constructor(data, offers) {
@@ -15,11 +16,14 @@ export default class Point {
     this.checkin = new Date();
     this.checkout = new Date();
     this.price = 0;
+    this.isSync = true;
     this._parse(data, offers);
   }
 
   toRAW() {
     return {
+      "isSync": this.isSync,
+      "isNew": false,
       "id": this.id,
       "is_favorite": this.isFavorites,
       "destination": this.info.toRAW(),
@@ -45,10 +49,11 @@ export default class Point {
       };
       this.destination = data[`destination`][`name`];
       this.offers = offers.map((offer) => {
-        offer[`isChecked`] = !!data[`offers`].find((checkedOffer) => {
-          return checkedOffer[`title`] === offer[`name`];
+        const newOffer = Object.assign(new Offer(), offer);
+        newOffer[`isChecked`] = !!data[`offers`].find((checkedOffer) => {
+          return checkedOffer[`title`] === newOffer[`name`];
         });
-        return offer;
+        return newOffer;
       });
       this.info = new Destination(data[`destination`]);
       this.checkin = new Date(data[`date_from`]);
@@ -57,7 +62,7 @@ export default class Point {
     }
   }
 
-  static parseMany(points, offers) {
+  static parse(points, offers) {
     return points.map((point) => {
       return new Point(point, offers.findOffers(point[`type`]));
     });

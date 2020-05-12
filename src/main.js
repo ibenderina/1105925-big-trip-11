@@ -9,10 +9,16 @@ import OffersModel from "@models/offers";
 import PointsModel from "@models/points";
 import FilterController from "@controllers/filter-controller";
 import TripController from "@controllers/trip-controller";
-import {RenderPosition, MenuItem, FilterType, ENDPOINT, AUTH_TOKEN} from "@consts";
+import {RenderPosition, MenuItem, FilterType} from "@consts";
+import Store from "@api/store";
 
-const htmlAcademyDataApi = new Api(ENDPOINT, AUTH_TOKEN);
-const adapteredApi = new Provider(htmlAcademyDataApi);
+const STORE_PREFIX = `bigtrip-localstorage`;
+const STORE_VER = `v2`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
+const store = new Store(STORE_NAME, window.localStorage);
+const htmlAcademyDataApi = new Api();
+const adapteredApi = new Provider(htmlAcademyDataApi, store);
 const modelPoints = new PointsModel();
 const modelDestinations = new DestinationsModel();
 const modelOffers = new OffersModel();
@@ -61,3 +67,15 @@ adapteredApi.getDestinations().then((destinations) => {
   tripController.render();
 });
 
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  adapteredApi.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});

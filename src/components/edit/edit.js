@@ -40,7 +40,9 @@ export default class Edit extends AbstractSmartComponent {
 
     editTripTime(dateEndElement, this._trip.checkin);
     this._element.addEventListener(`click`, () => {
-      this._element.classList.remove(`shake`);
+      if (this._element) {
+        this._element.classList.remove(`shake`);
+      }
     });
     return this._element;
   }
