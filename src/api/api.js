@@ -3,11 +3,16 @@ import OfferModel from "@models/offer";
 import DestinationModel from "@models/destination";
 import {Method} from "@consts";
 
+const Server = {
+  ENDPOINT: `https://11.ecmascript.pages.academy/big-trip`,
+  AUTH_TOKEN: `Basic kittens`
+};
+
 export class Api {
-  constructor(baseURL, authToken) {
-    this._baseURL = baseURL;
+  constructor() {
+    this._baseURL = Server.ENDPOINT;
     this._headers = {
-      "Authorization": authToken,
+      "Authorization": Server.AUTH_TOKEN,
       "Content-Type": `application/json`
     };
   }
@@ -44,19 +49,19 @@ export class Api {
 
   getDestinations() {
     return this._load(`destinations`).then((destinations) => {
-      return DestinationModel.parseMany(destinations);
+      return DestinationModel.parse(destinations);
     });
   }
 
   getOffers() {
     return this._load(`offers`).then((offers) => {
-      return OfferModel.parseMany(offers);
+      return OfferModel.parse(offers);
     });
   }
 
   getPoints(offers) {
     return this._load(`points`).then((points) => {
-      return PointModel.parseMany(points, offers);
+      return PointModel.parse(points, offers);
     });
   }
 

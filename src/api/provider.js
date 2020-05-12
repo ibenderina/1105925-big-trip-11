@@ -24,7 +24,7 @@ export class Provider {
       });
     }
     const store = Object.values(this._store.getItems(LOCAL_STORE_KEYS.DESTINATIONS));
-    return Promise.resolve(DestinationModel.parseMany(store));
+    return Promise.resolve(DestinationModel.parse(store));
   }
 
   getOffers() {
@@ -40,7 +40,7 @@ export class Provider {
       });
     }
     const store = Object.values(this._store.getItems(LOCAL_STORE_KEYS.OFFERS));
-    return Promise.resolve(OfferModel.parseMany(store));
+    return Promise.resolve(OfferModel.parse(store));
   }
 
   getPoints(offers) {
@@ -54,7 +54,7 @@ export class Provider {
       });
     }
     const store = Object.values(this._store.getItems(LOCAL_STORE_KEYS.POINTS));
-    return Promise.resolve(PointModel.parseMany(store, offers));
+    return Promise.resolve(PointModel.parse(store, offers));
   }
 
   updatePoint(point, offers) {

@@ -59,16 +59,6 @@ export const Method = {
   DELETE: `DELETE`
 };
 
-export const ENDPOINT = `https://11.ecmascript.pages.academy/big-trip`;
-
-export const AUTH_TOKEN = `Basic kittens`;
-
-export const ChartTitle = {
-  MONEY: `MONEY`,
-  TRANSPORT: `TRANSPORT`,
-  TIME_SPENT: `TIME SPENT`
-};
-
 export const LOCAL_STORE_KEYS = {
   POINTS: `points`,
   REMOVED_POINTS: `removed-points`,

@@ -23,7 +23,7 @@ export default class Offer {
     });
   }
 
-  static parseMany(rawOffers) {
+  static parse(rawOffers) {
     const offers = {};
     rawOffers.forEach((typeOffers) => {
       offers[typeOffers[`type`]] = Offer.parseOffersList(typeOffers[`offers`]);

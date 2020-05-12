@@ -9,7 +9,7 @@ import OffersModel from "@models/offers";
 import PointsModel from "@models/points";
 import FilterController from "@controllers/filter-controller";
 import TripController from "@controllers/trip-controller";
-import {RenderPosition, MenuItem, FilterType, ENDPOINT, AUTH_TOKEN} from "@consts";
+import {RenderPosition, MenuItem, FilterType} from "@consts";
 import Store from "@api/store";
 
 const STORE_PREFIX = `bigtrip-localstorage`;
@@ -17,7 +17,7 @@ const STORE_VER = `v2`;
 const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const store = new Store(STORE_NAME, window.localStorage);
-const htmlAcademyDataApi = new Api(ENDPOINT, AUTH_TOKEN);
+const htmlAcademyDataApi = new Api();
 const adapteredApi = new Provider(htmlAcademyDataApi, store);
 const modelPoints = new PointsModel();
 const modelDestinations = new DestinationsModel();

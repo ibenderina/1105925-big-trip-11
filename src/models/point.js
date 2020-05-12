@@ -61,7 +61,7 @@ export default class Point {
     }
   }
 
-  static parseMany(points, offers) {
+  static parse(points, offers) {
     return points.map((point) => {
       return new Point(point, offers.findOffers(point[`type`]));
     });

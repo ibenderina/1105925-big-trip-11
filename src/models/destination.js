@@ -18,7 +18,7 @@ export default class Destination {
     };
   }
 
-  static parseMany(destinations) {
+  static parse(destinations) {
     return destinations.map((destination) => {
       return new Destination(destination);
     });
