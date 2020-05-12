@@ -23,6 +23,7 @@ export default class Point {
   toRAW() {
     return {
       "isSync": this.isSync,
+      "isNew": false,
       "id": this.id,
       "is_favorite": this.isFavorites,
       "destination": this.info.toRAW(),

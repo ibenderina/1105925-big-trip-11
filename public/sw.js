@@ -22,6 +22,7 @@ self.addEventListener(`install`, (evt) => {
             `/img/icons/train.png`,
             `/img/icons/transport.png`,
             `https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css`,
+            `https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.js`,
             `https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800&display=swap`
           ]);
         })

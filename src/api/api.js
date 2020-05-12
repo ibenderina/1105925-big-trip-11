@@ -76,6 +76,21 @@ export class Api {
     });
   }
 
+  sync(updatedPoints, removedPoints) {
+    removedPoints.forEach((pointId) => {
+      return this.deletePoint({id: pointId});
+    });
+    updatedPoints.forEach((point) => {
+      const [pointId, method] = point.isNew ? [``, Method.POST] : [point.id, Method.PUT];
+      return fetch(`${this._baseURL}/points/${pointId}`, {
+        method,
+        body: JSON.stringify(point),
+        headers: this._headers
+      }).then((response) => response.json());
+    });
+    return Promise.resolve();
+  }
+
   _load(target) {
     return fetch(`${this._baseURL}/${target}`, {
       headers: this._headers
@@ -85,19 +100,5 @@ export class Api {
       }
       throw new Error(`target not found`);
     });
-  }
-
-  sync(updatedPoints, removedPoints) {
-    removedPoints.forEach((pointId) => {
-      return this.deletePoint({id: pointId});
-    });
-    updatedPoints.forEach((point) => {
-      return fetch(`${this._baseURL}/points/${point.id || ``}`, {
-        method: point.id ? Method.PUT : Method.POST,
-        body: JSON.stringify(point),
-        headers: this._headers
-      }).then((response) => response.json());
-    });
-    return Promise.resolve();
   }
 }

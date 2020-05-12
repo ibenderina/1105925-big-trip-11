@@ -36,11 +36,13 @@ export default class TripController {
     this._onCloseNewEvent = this._onCloseNewEvent.bind(this);
     this._updateModelPoints = this._updateModelPoints.bind(this);
 
-    this._modelPoints.setFilterChangeHandler(this._updateTrips);
-
     this._addNewEventHandler();
     this._sortComponent.setSortTypeChangeHandler(this._changeSortType);
-    this._modelPoints.setFilterChangeHandler(this._sortComponent.resetSortType);
+    this._modelPoints.setFilterChangeHandler(() => {
+      this._sortComponent.resetSortType();
+      this._updateTrips();
+      this._newEventBtn.disabled = false;
+    });
     render(this._tripEvents, this._load.getElement(), RenderPosition.BEFOREEND);
   }
 
@@ -58,16 +60,14 @@ export default class TripController {
     const noEvents = this._noEvent.getElement();
     if (!trips.length) {
       render(this._tripEvents, noEvents, RenderPosition.BEFOREEND);
+      this._noEvent.show();
     } else {
-      this._noEvent.removeElement();
+      this._noEvent.hide();
       this._renderTripInfo();
       render(this._tripEvents, this._sortComponent.getElement(), RenderPosition.BEFOREEND);
-      render(this._tripEvents, this._container.getElement(), RenderPosition.BEFOREEND);
     }
-
+    render(this._tripEvents, this._container.getElement(), RenderPosition.BEFOREEND);
     this._renderTripDays(this._container.getElement(), trips);
-
-    this._newEventBtn.disabled = false;
   }
 
   _updateModelPoints(pointController, oldData, newData) {
@@ -86,7 +86,6 @@ export default class TripController {
   }
 
   _onDataChange(pointController, oldData, newData) {
-    this._newEventBtn.disabled = false;
     const updateModelPoint = (point) => {
       return this._updateModelPoints(pointController, oldData, (point || newData));
     };
@@ -153,8 +152,8 @@ export default class TripController {
 
   _onCloseNewEvent(dayComponent) {
     dayComponent.removeElement();
+    this._updateTrips();
     this._newEventBtn.disabled = false;
-    this._showedEventComponents.pop();
   }
 
   _onViewChange() {
@@ -187,14 +186,13 @@ export default class TripController {
     this._newEventBtn.addEventListener(`click`, () => {
       this._sortComponent.resetSortType();
       this._modelPoints.setFilter(FilterType.EVERYTHING);
-      this._updateTrips();
       this._newEventBtn.disabled = true;
       this._onViewChange();
       const newTrip = new PointModel();
-      this._modelPoints.addTrip(newTrip);
       this._updateTrips();
-      // const day = this._renderTripDay([newTrip], ``);
-      // render(this._container.getElement(), day, RenderPosition.AFTERBEGIN);
+      this._noEvent.hide();
+      const day = this._renderTripDay([newTrip], ``);
+      render(this._container.getElement(), day, RenderPosition.AFTERBEGIN);
     });
   }
 }

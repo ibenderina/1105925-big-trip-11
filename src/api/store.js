@@ -23,21 +23,26 @@ export default class Store {
   }
 
   setItem(key, point) {
-    let store = this.getItems(key);
-    if (point.id) {
-      store = store.map((storedPoint) => {
-        return storedPoint.id === point.id ? point : storedPoint;
-      });
-    } else {
+    let isNew = point.isNew;
+    const store = this.getItems(key).map((storedPoint) => {
+      if (storedPoint.id === point.id) {
+        isNew = false;
+        return point;
+      }
+      return storedPoint;
+    });
+    if (isNew) {
       store.push(point);
     }
     this._storage.setItem(`${this._storeKey}-${key}`, JSON.stringify(store));
   }
 
   removePoint(point) {
-    const removedStore = this.getItems(`removed-points`);
-    removedStore.push(point.id);
-    this._storage.setItem(`${this._storeKey}-removed-points`, JSON.stringify(removedStore));
+    if (!point.isNew) {
+      const removedStore = this.getItems(`removed-points`);
+      removedStore.push(point.id);
+      this._storage.setItem(`${this._storeKey}-removed-points`, JSON.stringify(removedStore));
+    }
 
     const store = this.getItems(`points`).filter((_point) => {
       return _point.id !== point.id;

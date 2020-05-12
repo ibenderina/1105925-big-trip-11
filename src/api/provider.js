@@ -9,10 +9,6 @@ export class Provider {
     this._store = store;
   }
 
-  _isOnline() {
-    return window.navigator.onLine;
-  }
-
   getDestinations() {
     if (this._isOnline()) {
       return this._api.getDestinations().then((items) => {
@@ -77,8 +73,9 @@ export class Provider {
       });
     }
     point.isSync = false;
-    this._store.setItem(LOCAL_STORE_KEYS.POINTS, point.toRAW());
+    point.isNew = true;
     point.id = Math.random().toString();
+    this._store.setItem(LOCAL_STORE_KEYS.POINTS, point.toRAW());
     return Promise.resolve(point);
   }
 
@@ -102,6 +99,7 @@ export class Provider {
         const _storePoints = this._store.getItems(LOCAL_STORE_KEYS.POINTS);
         storePoints.map((point) => {
           point.isSync = true;
+          point.isNew = false;
           return point;
         });
         this._store.setItems(LOCAL_STORE_KEYS.POINTS, _storePoints);
@@ -110,5 +108,9 @@ export class Provider {
     }
 
     return Promise.reject(new Error(`Sync data failed`));
+  }
+
+  _isOnline() {
+    return window.navigator.onLine;
   }
 }
