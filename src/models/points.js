@@ -35,6 +35,7 @@ export default class Points {
     this._trips = [].concat(this._trips.slice(0, index), this._trips.slice(index + 1));
 
     this._callHandlers(this._dataChangeHandlers);
+    this._callHandlers(this._filterChangeHandlers);
 
     return true;
   }
@@ -60,24 +61,26 @@ export default class Points {
       return _trip.id;
     }));
     this._callHandlers(this._dataChangeHandlers);
+    this._callHandlers(this._filterChangeHandlers);
     return true;
   }
 
-  filterBy(trips) {
+  filterBy(trips, filterType) {
+    const _trips = trips || this._trips;
     const now = new Date();
-    switch (this._activeFilterType) {
+    switch (filterType || this._activeFilterType) {
       case FilterType.FUTURE:
-        return trips.filter((trip) => {
+        return _trips.filter((trip) => {
           return trip.checkin > now;
         });
 
       case FilterType.PAST:
-        return trips.filter((trip) => {
+        return _trips.filter((trip) => {
           return trip.checkin < now;
         });
 
       default:
-        return trips;
+        return _trips;
     }
   }
 
@@ -101,20 +104,32 @@ export default class Points {
 
   calcTotalCost() {
     return this._trips.reduce((sum, trip) => {
-      return sum + trip.price;
+      const offersCost = trip.offers.reduce((cost, offer) => {
+        return cost + (offer.isChecked ? offer.price : 0);
+      }, 0);
+      return sum + trip.price + offersCost;
     }, 0);
   }
 
   getDestinations() {
-    return [...new Set(this._trips.map((trip) => {
+    return this._sortByCheckin(this._trips).map((trip) => {
       return trip.destination;
-    }))];
+    });
   }
 
   getTripDates() {
-    return [...new Set(this._trips.map((trip) => {
-      return trip.checkin;
-    }))];
+    return this._trips.reduce((scope, trip) => {
+      if (trip.checkin < scope.min) {
+        scope.min = trip.checkin;
+      }
+      if (trip.checkout > scope.max) {
+        scope.max = trip.checkout;
+      }
+      return scope;
+    }, {
+      min: this._trips[0].checkin,
+      max: this._trips[0].checkout
+    });
   }
 
   _sortByCheckin(trips) {

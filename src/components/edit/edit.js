@@ -17,13 +17,20 @@ export default class Edit extends AbstractSmartComponent {
   }
 
   getData() {
-    const form = this.getElement();
+    const form = this._element;
     return {
       destination: form.querySelector(`[name="event-destination"]`).value,
       checkin: new Date(moment(form.querySelector(`[name="event-start-time"]`).value, `DD/MM/YYYY hh:mm`)),
       checkout: new Date(moment(form.querySelector(`[name="event-end-time"]`).value, `DD/MM/YYYY hh:mm`)),
       price: parseInt(form.querySelector(`[name="event-price"]`).value, 10)
     };
+  }
+
+  removeElement() {
+    this.startDateFlatpicker.destroy();
+    this.endDateFlatpicker.destroy();
+
+    super.removeElement();
   }
 
   getElement() {
@@ -34,11 +41,11 @@ export default class Edit extends AbstractSmartComponent {
     const dateEndElement = this._element.querySelector(`#event-end-time-1`);
     const dateStartElement = this._element.querySelector(`#event-start-time-1`);
 
-    editTripTime(dateStartElement, `today`, (selectedDates, dateStr) => {
+    this.startDateFlatpicker = editTripTime(dateStartElement, `today`, (selectedDates, dateStr) => {
       editTripTime(dateEndElement, dateStr);
     });
 
-    editTripTime(dateEndElement, this._trip.checkin);
+    this.endDateFlatpicker = editTripTime(dateEndElement, this._trip.checkin);
     this._element.addEventListener(`click`, () => {
       if (this._element) {
         this._element.classList.remove(`shake`);
@@ -48,13 +55,13 @@ export default class Edit extends AbstractSmartComponent {
   }
 
   _disableForm(disabled) {
-    this._element.querySelectorAll(`input`, `button`).forEach((el) => {
+    this._element.querySelectorAll(`input, button`).forEach((el) => {
       el.disabled = disabled;
     });
   }
 
   setChangeEventTypeHandler(handler) {
-    this.getElement()
+    this._element
         .querySelectorAll(`.event__type-input`)
         .forEach((item) => {
           item.addEventListener(`change`, handler);
@@ -62,13 +69,13 @@ export default class Edit extends AbstractSmartComponent {
   }
 
   setChangeDestinationHandler(handler) {
-    this.getElement()
+    this._element
         .querySelector(`.event__input--destination`)
         .addEventListener(`focusout`, handler);
   }
 
   setToggleKeydownEnterHandler(handler) {
-    this.getElement()
+    this._element
         .querySelector(`.event__type-wrapper`)
         .addEventListener(`keydown`, handler);
   }
@@ -81,7 +88,7 @@ export default class Edit extends AbstractSmartComponent {
   }
 
   setSubmitHandler(handler) {
-    this.getElement()
+    this._element
       .addEventListener(`submit`, (evt) => {
         evt.preventDefault();
         const btn = evt.target.querySelector(`.event__save-btn`);
@@ -115,19 +122,19 @@ export default class Edit extends AbstractSmartComponent {
   }
 
   setClickFavoriteButtonHandler(handler) {
-    this.getElement()
-        .querySelector(`.event__favorite-btn`)
-        .addEventListener(`click`, handler);
+    this._element
+        .querySelector(`.event__favorite-checkbox`)
+        .addEventListener(`change`, handler);
   }
 
   setInputHandler(handler) {
-    this.getElement()
+    this._element
         .querySelector(`.event__input--destination`)
         .addEventListener(`keydown`, handler);
   }
 
   setPriceInputHandler(handler) {
-    this.getElement()
+    this._element
         .querySelector(`.event__input--price`)
         .addEventListener(`input`, handler);
   }
@@ -140,7 +147,7 @@ export default class Edit extends AbstractSmartComponent {
   }
 
   setCheckOfferHandler(handler) {
-    this.getElement()
+    this._element
         .querySelectorAll(`.event__offer-checkbox`).forEach((inputElement) => {
           inputElement.addEventListener(`change`, handler);
         });

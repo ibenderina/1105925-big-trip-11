@@ -1,4 +1,5 @@
 import AbstractComponent from "@abstract";
+import {FilterType} from "@consts";
 import {createFiltersTemplate} from "./filters-tpl";
 
 export default class Filter extends AbstractComponent {
@@ -19,5 +20,12 @@ export default class Filter extends AbstractComponent {
 
   setFilter(filterType) {
     this.getElement().querySelector(`.trip-filters__filter-input[value="${filterType}"]`).checked = true;
+  }
+
+  setTabsState(futureIsEnable, pastIsEnable) {
+    const element = this.getElement();
+    [[FilterType.FUTURE, futureIsEnable], [FilterType.PAST, pastIsEnable]].forEach(([filterType, isEnable]) => {
+      element.querySelector(`.trip-filters__filter-input[value="${filterType}"]`).disabled = !isEnable;
+    });
   }
 }

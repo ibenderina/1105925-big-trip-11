@@ -29,6 +29,12 @@ export default class FilterController {
     this._filterComponent = new FiltersComponent(filters);
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
 
+    this._tripsModel.setDataChangeHandler(() => {
+      this._filterComponent.setTabsState(
+          this._tripsModel.filterBy(null, FilterType.FUTURE).length,
+          this._tripsModel.filterBy(null, FilterType.PAST).length
+      );
+    });
     this._tripsModel.setFilterChangeHandler((filterType) => {
       this._filterComponent.setFilter(filterType);
     });

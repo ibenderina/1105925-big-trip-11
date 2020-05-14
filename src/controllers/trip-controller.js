@@ -85,30 +85,43 @@ export default class TripController {
     return null;
   }
 
-  _onDataChange(pointController, oldData, newData) {
+  _onDataChange(pointController, oldData, newData, sendToServer) {
     const updateModelPoint = (point) => {
       return this._updateModelPoints(pointController, oldData, (point || newData));
     };
+    if (sendToServer) {
+      if (!newData) {
+        return this._api.deletePoint(oldData).then(updateModelPoint);
+      } else if (newData.id) {
+        return this._api.updatePoint(newData, this._modelOffers).then(updateModelPoint);
+      } else if (!newData.id) {
+        return this._api.createPoint(newData, this._modelOffers).then(updateModelPoint);
+      }
+    }
+
     if (pointController) {
       return Promise.resolve(updateModelPoint());
     }
-    if (!newData) {
-      return this._api.deletePoint(oldData).then(updateModelPoint);
-    } else if (newData.id) {
-      return this._api.updatePoint(newData, this._modelOffers).then(updateModelPoint);
-    } else if (!newData.id) {
-      return this._api.createPoint(newData, this._modelOffers).then(updateModelPoint);
-    }
+
     return null;
   }
 
   _renderTripDays(tripDaysElement, trips) {
-    const dates = getUniqueTripDates(trips);
-    return dates.map((date, i) => {
-      const sortedTrips = trips.filter((trip) => {
-        return formatDate(trip.checkin, `Y-m-d`) === date;
-      });
-      tripDaysElement.appendChild(this._renderTripDay(sortedTrips, i));
+    const sortedTrips = {};
+    let newTrip = null;
+    trips.forEach((trip) => {
+      if (trip.id) {
+        const key = formatDate(trip.checkin, `d-m-Y`);
+        sortedTrips[key] = sortedTrips[key] ? sortedTrips[key].concat(trip) : [trip];
+        return;
+      }
+      newTrip = trip;
+    });
+    if (newTrip) {
+      tripDaysElement.appendChild(this._renderTripDay([newTrip], ``));
+    }
+    return Object.keys(sortedTrips).forEach((key, i) => {
+      tripDaysElement.appendChild(this._renderTripDay(sortedTrips[key], i));
     });
   }
 
@@ -152,7 +165,6 @@ export default class TripController {
 
   _onCloseNewEvent(dayComponent) {
     dayComponent.removeElement();
-    this._updateTrips();
     this._newEventBtn.disabled = false;
   }
 
@@ -188,8 +200,7 @@ export default class TripController {
       this._modelPoints.setFilter(FilterType.EVERYTHING);
       this._newEventBtn.disabled = true;
       this._onViewChange();
-      const newTrip = new PointModel();
-      this._updateTrips();
+      const newTrip = new PointModel(null, this._modelOffers.findOffers(`taxi`));
       this._noEvent.hide();
       const day = this._renderTripDay([newTrip], ``);
       render(this._container.getElement(), day, RenderPosition.AFTERBEGIN);

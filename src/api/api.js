@@ -5,7 +5,7 @@ import {Method} from "@consts";
 
 const Server = {
   ENDPOINT: `https://11.ecmascript.pages.academy/big-trip`,
-  AUTH_TOKEN: `Basic kittens`
+  AUTH_TOKEN: `Basic kittens3`
 };
 
 export class Api {
@@ -76,19 +76,13 @@ export class Api {
     });
   }
 
-  sync(updatedPoints, removedPoints) {
-    removedPoints.forEach((pointId) => {
-      return this.deletePoint({id: pointId});
-    });
-    updatedPoints.forEach((point) => {
-      const [pointId, method] = point.isNew ? [``, Method.POST] : [point.id, Method.PUT];
-      return fetch(`${this._baseURL}/points/${pointId}`, {
-        method,
-        body: JSON.stringify(point),
-        headers: this._headers
-      }).then((response) => response.json());
-    });
-    return Promise.resolve();
+  sync(points) {
+    // у этого метода есть баг. Он принимает и записывает что угодно. На пример ["Привет"]
+    return fetch(`${this._baseURL}/points/sync`, {
+      method: Method.POST,
+      body: JSON.stringify(points),
+      headers: this._headers
+    }).then((response) => response.json());
   }
 
   _load(target) {

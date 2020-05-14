@@ -19,8 +19,8 @@ export class Provider {
         return items;
       });
     }
-    const store = Object.values(this._store.getItems(LOCAL_STORE_KEYS.DESTINATIONS));
-    return Promise.resolve(DestinationModel.parse(store));
+    const destinations = Object.values(this._store.getItems(LOCAL_STORE_KEYS.DESTINATIONS));
+    return Promise.resolve(DestinationModel.parse(destinations));
   }
 
   getOffers() {
@@ -35,8 +35,8 @@ export class Provider {
         return items;
       });
     }
-    const store = Object.values(this._store.getItems(LOCAL_STORE_KEYS.OFFERS));
-    return Promise.resolve(OfferModel.parse(store));
+    const offers = Object.values(this._store.getItems(LOCAL_STORE_KEYS.OFFERS));
+    return Promise.resolve(OfferModel.parse(offers));
   }
 
   getPoints(offers) {
@@ -49,33 +49,30 @@ export class Provider {
         return items;
       });
     }
-    const store = Object.values(this._store.getItems(LOCAL_STORE_KEYS.POINTS));
-    return Promise.resolve(PointModel.parse(store, offers));
+    const points = Object.values(this._store.getItems(LOCAL_STORE_KEYS.POINTS));
+    return Promise.resolve(PointModel.parse(points, offers));
   }
 
   updatePoint(point, offers) {
     if (this._isOnline()) {
       return this._api.updatePoint(point, offers).then((_point) => {
-        this._store.setItem(LOCAL_STORE_KEYS.POINTS, _point.toRAW());
+        this._store.setPoint(_point.toRAW());
         return _point;
       });
     }
-    point.isSync = false;
-    this._store.setItem(LOCAL_STORE_KEYS.POINTS, point.toRAW());
+    this._store.setPoint(point.toRAW());
     return Promise.resolve(point);
   }
 
   createPoint(point, offers) {
     if (this._isOnline()) {
       return this._api.createPoint(point, offers).then((_point) => {
-        this._store.setItem(LOCAL_STORE_KEYS.POINTS, _point.toRAW());
+        this._store.setPoint(_point.toRAW());
         return _point;
       });
     }
-    point.isSync = false;
-    point.isNew = true;
     point.id = Math.random().toString();
-    this._store.setItem(LOCAL_STORE_KEYS.POINTS, point.toRAW());
+    this._store.setPoint(point.toRAW());
     return Promise.resolve(point);
   }
 
@@ -91,19 +88,10 @@ export class Provider {
 
   sync() {
     if (this._isOnline()) {
-      const storePoints = this._store.getItems(LOCAL_STORE_KEYS.POINTS).filter((point) => {
-        return !point.isSync;
-      });
-      const removedPoints = this._store.getItems(LOCAL_STORE_KEYS.REMOVED_POINTS);
-      return this._api.sync(storePoints, removedPoints).then(() => {
-        const _storePoints = this._store.getItems(LOCAL_STORE_KEYS.POINTS);
-        storePoints.map((point) => {
-          point.isSync = true;
-          point.isNew = false;
-          return point;
-        });
-        this._store.setItems(LOCAL_STORE_KEYS.POINTS, _storePoints);
-        this._store.setItems(LOCAL_STORE_KEYS.REMOVED_POINTS, []);
+      const storePoints = this._store.getItems(LOCAL_STORE_KEYS.POINTS);
+      return this._api.sync(storePoints).then((response) => {
+        const points = [...response.created, ...response.updated];
+        this._store.setItems(points);
       });
     }
 

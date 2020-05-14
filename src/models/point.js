@@ -16,14 +16,11 @@ export default class Point {
     this.checkin = new Date();
     this.checkout = new Date();
     this.price = 0;
-    this.isSync = true;
     this._parse(data, offers);
   }
 
   toRAW() {
     return {
-      "isSync": this.isSync,
-      "isNew": false,
       "id": this.id,
       "is_favorite": this.isFavorites,
       "destination": this.info.toRAW(),
@@ -48,6 +45,10 @@ export default class Point {
         type: [EVENT_TYPES.ACTIVE].includes(data[`type`]) ? ACTIVITY : TRANSFER
       };
       this.destination = data[`destination`][`name`];
+      this.info = new Destination(data[`destination`]);
+      this.checkin = new Date(data[`date_from`]);
+      this.checkout = new Date(data[`date_to`]);
+      this.price = data[`base_price`];
       this.offers = offers.map((offer) => {
         const newOffer = Object.assign(new Offer(), offer);
         newOffer[`isChecked`] = !!data[`offers`].find((checkedOffer) => {
@@ -55,10 +56,10 @@ export default class Point {
         });
         return newOffer;
       });
-      this.info = new Destination(data[`destination`]);
-      this.checkin = new Date(data[`date_from`]);
-      this.checkout = new Date(data[`date_to`]);
-      this.price = data[`base_price`];
+    } else if (offers) {
+      this.offers = offers.map((offer) => {
+        return Object.assign(new Offer(), offer);
+      });
     }
   }
 

@@ -1,9 +1,10 @@
 import moment from "moment";
 
 const createTripInfoDates = (datesOfTrip) => {
-  return datesOfTrip.map((date) => {
-    return moment(date).format(`D MMM`);
-  }).join(` — `);
+  return [
+    moment(datesOfTrip.min).format(`D MMM`),
+    moment(datesOfTrip.max).format(`D MMM`)
+  ].join(` — `);
 };
 
 const createTripInfoTemplate = (destinations, datesOfTrip) => {

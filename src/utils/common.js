@@ -3,7 +3,7 @@ import moment from "moment";
 import flatpickr from "flatpickr";
 
 export const editTripTime = (element, minDate, onChange) => {
-  flatpickr(element, {
+  return flatpickr(element, {
     dateFormat: `d/m/Y H:i`,
     enableTime: true,
     onChange,

@@ -27,6 +27,7 @@ export default class PointController {
     this._eventTypeChanger = this._eventTypeChanger.bind(this);
     this._destinationChanger = this._destinationChanger.bind(this);
     this._rollup = this._rollup.bind(this);
+    this._favoriteChanger = this._favoriteChanger.bind(this);
   }
 
   destroy() {
@@ -53,10 +54,11 @@ export default class PointController {
       replace(this._editComponent, oldEditComponent);
       replace(this._eventComponent, oldEventComponent);
       this._setEventEditListeners();
+      oldEditComponent.removeElement();
+      oldEventComponent.removeElement();
     } else {
-      this._mode = trip.id ? this._mode : EventsSortMode.EDIT;
       this._container.appendChild(this._eventComponent.getElement());
-      if (this._mode === EventsSortMode.EDIT) {
+      if (!trip.id) {
         this._replaceTripToEdit();
       }
     }
@@ -130,26 +132,37 @@ export default class PointController {
 
   _replaceTripToEvent() {
     document.removeEventListener(`keydown`, this._onEscKeydown);
+    this._mode = EventsSortMode.DEFAULT;
     if (this._trip.id) {
       return replace(this._eventComponent, this._editComponent);
     }
     return this._onCloseNewEvent();
   }
 
+  _favoriteChanger(evt) {
+    this._trip.isFavorites = evt.target.checked;
+    if (this._trip.id) {
+      return this._onDataChange(this, this._trip, this._trip, true);
+    }
+    return Promise.resolve();
+  }
+
   _setEventEditListeners() {
+    this._editComponent.getElement();
     this._editComponent.setChangeDestinationHandler(this._destinationChanger);
+    this._editComponent.setClickFavoriteButtonHandler(this._favoriteChanger);
 
     this._editComponent.setClickRollupButtonHandler(this._rollup);
     this._editComponent.setClickCancelButtonHandler(this._replaceTripToEvent);
     this._editComponent.setClickDeleteButtonHandler((evt) => {
-      return this._onDataChange(null, this._trip, null).then(() => {
+      return this._onDataChange(null, this._trip, null, true).then(() => {
         this._replaceTripToEvent(evt);
       });
     });
     this._editComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
       return this._onDataChange(
-          null, this._trip, Object.assign(new PointModel(), this._trip, this._editComponent.getData())
+          null, this._trip, Object.assign(new PointModel(), this._trip, this._editComponent.getData()), true
       ).then(() => {
         this._replaceTripToEvent();
         document.removeEventListener(`keydown`, this._onEscKeydown);
@@ -157,9 +170,6 @@ export default class PointController {
     });
     this._editComponent.setToggleKeydownEnterHandler(this._onToggleKeydownEnter);
     this._editComponent.setChangeEventTypeHandler(this._eventTypeChanger);
-    this._editComponent.setClickFavoriteButtonHandler(() => {
-      this._trip.isFavorites = !this._trip.isFavorites;
-    });
     this._editComponent.setInputHandler(this._forbidDestination);
     this._editComponent.setPriceInputHandler(this._changePrice);
 

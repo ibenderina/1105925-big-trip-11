@@ -1,3 +1,5 @@
+import {LOCAL_STORE_KEYS} from "../consts";
+
 export default class Store {
   constructor(key, storage) {
     this._storage = storage;
@@ -18,35 +20,22 @@ export default class Store {
     }
   }
 
-  setItems(key, items) {
-    this._storage.setItem(`${this._storeKey}-${key}`, JSON.stringify(items));
+  setItems(key, points) {
+    this._storage.setItem(`${this._storeKey}-${key}`, JSON.stringify(points));
   }
 
-  setItem(key, point) {
-    let isNew = point.isNew;
-    const store = this.getItems(key).map((storedPoint) => {
-      if (storedPoint.id === point.id) {
-        isNew = false;
-        return point;
-      }
-      return storedPoint;
+  setPoint(point) {
+    const store = this.getItems(LOCAL_STORE_KEYS.POINTS).filter((storedPoint) => {
+      return storedPoint.id !== point.id;
     });
-    if (isNew) {
-      store.push(point);
-    }
-    this._storage.setItem(`${this._storeKey}-${key}`, JSON.stringify(store));
+    store.push(point);
+    this._storage.setItem(`${this._storeKey}-${LOCAL_STORE_KEYS.POINTS}`, JSON.stringify(store));
   }
 
   removePoint(point) {
-    if (!point.isNew) {
-      const removedStore = this.getItems(`removed-points`);
-      removedStore.push(point.id);
-      this._storage.setItem(`${this._storeKey}-removed-points`, JSON.stringify(removedStore));
-    }
-
-    const store = this.getItems(`points`).filter((_point) => {
+    const store = this.getItems(LOCAL_STORE_KEYS.POINTS).filter((_point) => {
       return _point.id !== point.id;
     });
-    this._storage.setItem(`${this._storeKey}-points`, JSON.stringify(store));
+    this._storage.setItem(`${this._storeKey}-${LOCAL_STORE_KEYS.POINTS}`, JSON.stringify(store));
   }
 }
