@@ -55,8 +55,19 @@ export default class Edit extends AbstractComponent {
   }
 
   _disableForm(disabled) {
-    this._element.querySelectorAll(`input, button`).forEach((el) => {
-      el.disabled = disabled;
+    this._element.querySelectorAll(`input, button`).forEach((element) => {
+      element.disabled = disabled;
+    });
+  }
+
+  _makeElementShake(btn, handler, evt) {
+    const text = btn.textContent;
+    btn.textContent = btn.dataset.alt;
+    this._disableForm(true);
+    handler(evt).catch(() => {
+      btn.textContent = text;
+      this._disableForm(false);
+      this._element.classList.add(`shake`);
     });
   }
 
@@ -92,14 +103,7 @@ export default class Edit extends AbstractComponent {
       .addEventListener(`submit`, (evt) => {
         evt.preventDefault();
         const btn = evt.target.querySelector(`.event__save-btn`);
-        const text = btn.textContent;
-        btn.textContent = btn.dataset.alt;
-        this._disableForm(true);
-        handler(evt).catch(() => {
-          btn.textContent = text;
-          this._disableForm(false);
-          this._element.classList.add(`shake`);
-        });
+        this._makeElementShake(btn, handler, evt);
       });
   }
 
@@ -109,14 +113,7 @@ export default class Edit extends AbstractComponent {
       element.addEventListener(`click`, (evt) => {
         evt.preventDefault();
         const btn = evt.target;
-        const text = btn.textContent;
-        btn.textContent = btn.dataset.alt;
-        this._disableForm(true);
-        handler(evt).catch(() => {
-          btn.textContent = text;
-          this._disableForm(false);
-          this._element.classList.add(`shake`);
-        });
+        this._makeElementShake(btn, handler, evt);
       });
     }
   }

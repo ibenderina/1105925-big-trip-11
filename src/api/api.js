@@ -77,7 +77,6 @@ export class Api {
   }
 
   sync(points) {
-    // у этого метода есть баг. Он принимает и записывает что угодно. На пример ["Привет"]
     return fetch(`${this._baseURL}/points/sync`, {
       method: Method.POST,
       body: JSON.stringify(points),

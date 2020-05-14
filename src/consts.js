@@ -65,3 +65,5 @@ export const LOCAL_STORE_KEYS = {
   OFFERS: `offers`,
   DESTINATIONS: `destinations`
 };
+
+export const STORAGE = `bigtrip-localstorage-v2`;

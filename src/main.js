@@ -9,14 +9,10 @@ import OffersModel from "@models/offers";
 import PointsModel from "@models/points";
 import FilterController from "@controllers/filter-controller";
 import TripController from "@controllers/trip-controller";
-import {RenderPosition, MenuItem, FilterType} from "@consts";
+import {RenderPosition, MenuItem, FilterType, STORAGE} from "@consts";
 import Store from "@api/store";
 
-const STORE_PREFIX = `bigtrip-localstorage`;
-const STORE_VER = `v2`;
-const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
-
-const store = new Store(STORE_NAME, window.localStorage);
+const store = new Store(STORAGE, window.localStorage);
 const htmlAcademyDataApi = new Api();
 const adapteredApi = new Provider(htmlAcademyDataApi, store);
 const modelPoints = new PointsModel();
