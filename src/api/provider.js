@@ -90,7 +90,7 @@ export class Provider {
     if (this._isOnline()) {
       const storePoints = this._store.getItems(LOCAL_STORE_KEYS.POINTS);
       return this._api.sync(storePoints).then((response) => {
-        const points = [...response.created, ...response.updated];
+        const points = [...response[`created`], ...response[`updated`]];
         this._store.setItems(points);
       });
     }

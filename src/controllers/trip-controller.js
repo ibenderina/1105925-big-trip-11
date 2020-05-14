@@ -1,4 +1,4 @@
-import {formatDate, getUniqueTripDates} from "@utils/common";
+import {formatDate} from "@utils/common";
 import {render} from "@utils/render";
 import DayComponent from "@components/day/day";
 import EventsComponent from "@components/events/events";

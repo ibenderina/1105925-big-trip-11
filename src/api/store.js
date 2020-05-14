@@ -1,4 +1,4 @@
-import {LOCAL_STORE_KEYS} from "../consts";
+import {LOCAL_STORE_KEYS} from "@consts";
 
 export default class Store {
   constructor(key, storage) {

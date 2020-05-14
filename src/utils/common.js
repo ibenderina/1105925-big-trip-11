@@ -31,12 +31,6 @@ export const getDuration = (time) => {
   return formatDuration(time.checkout - time.checkin);
 };
 
-export const getUniqueTripDates = (events) => {
-  return [...new Set(events.map((trip) => {
-    return formatDate(trip.checkin, `d-m-Y`);
-  }))];
-};
-
 export const formatTime = (date) => {
   return moment(date).format(`hh:mm`);
 };
