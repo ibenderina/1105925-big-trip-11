@@ -1,5 +1,5 @@
 import AbstractComponent from "@abstract";
-import {createStatsTemplate, moneyChart, transportChart, timeChart} from "../stats/stats-tpl";
+import {createStatsTemplate, moneyChart, transportChart, timeChart} from "./stats-tpl";
 
 export default class Stats extends AbstractComponent {
   constructor(modelPoints) {

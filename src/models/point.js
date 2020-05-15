@@ -19,6 +19,14 @@ export default class Point {
     this._parse(data, offers);
   }
 
+  clone() {
+    const newPoint = Object.assign(new Point(), this);
+    newPoint.offers = this.offers.map((offer) => {
+      return Object.assign(new Offer(), offer);
+    });
+    return newPoint;
+  }
+
   toRAW() {
     return {
       "id": this.id,

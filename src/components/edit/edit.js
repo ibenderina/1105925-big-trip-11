@@ -38,14 +38,14 @@ export default class Edit extends AbstractComponent {
       return this._element;
     }
     super.getElement();
-    const dateEndElement = this._element.querySelector(`#event-end-time-1`);
-    const dateStartElement = this._element.querySelector(`#event-start-time-1`);
+    const dateEnd = this._element.querySelector(`#event-end-time-1`);
+    const dateStart = this._element.querySelector(`#event-start-time-1`);
 
-    this.startDateFlatpicker = editTripTime(dateStartElement, `today`, (selectedDates, dateStr) => {
-      editTripTime(dateEndElement, dateStr);
+    this.startDateFlatpicker = editTripTime(dateStart, `today`, (selectedDates, dateStr) => {
+      editTripTime(dateEnd, dateStr);
     });
 
-    this.endDateFlatpicker = editTripTime(dateEndElement, this._trip.checkin);
+    this.endDateFlatpicker = editTripTime(dateEnd, this._trip.checkin);
     this._element.addEventListener(`click`, () => {
       if (this._element) {
         this._element.classList.remove(`shake`);
@@ -119,9 +119,10 @@ export default class Edit extends AbstractComponent {
   }
 
   setClickFavoriteButtonHandler(handler) {
-    this._element
-        .querySelector(`.event__favorite-checkbox`)
-        .addEventListener(`change`, handler);
+    const favoriteButton = this._element.querySelector(`.event__favorite-checkbox`);
+    if (favoriteButton) {
+      favoriteButton.addEventListener(`change`, handler);
+    }
   }
 
   setInputHandler(handler) {
@@ -145,8 +146,8 @@ export default class Edit extends AbstractComponent {
 
   setCheckOfferHandler(handler) {
     this._element
-        .querySelectorAll(`.event__offer-checkbox`).forEach((inputElement) => {
-          inputElement.addEventListener(`change`, handler);
+        .querySelectorAll(`.event__offer-checkbox`).forEach((element) => {
+          element.addEventListener(`change`, handler);
         });
   }
 }

@@ -8,7 +8,7 @@ import TripInfoComponent from "@components/info/info";
 import CostComponent from "@components/cost/cost";
 import NoEventsComponent from "@components/no-events/no-events";
 import LoadComponent from "@components/load/load";
-import PointController from "./point-controller";
+import PointController from "@controllers/point-controller";
 import PointModel from "@models/point";
 import {FilterType, HIDDEN_CLASS, RenderPosition, SortType} from "@consts";
 
@@ -142,25 +142,25 @@ export default class TripController {
 
   _renderTripDay(trips, dayNumber) {
     const dayComponent = new DayComponent(trips[0].checkin, dayNumber);
-    const dayElement = dayComponent.getElement();
-    dayElement.appendChild(this._renderEventsComponent(trips, () => {
+    const day = dayComponent.getElement();
+    day.appendChild(this._renderEventsComponent(trips, () => {
       this._onCloseNewEvent(dayComponent);
     }));
-    return dayElement;
+    return day;
   }
 
   _renderEventsComponent(trips, closeNewEventHandler) {
-    const eventsElement = new EventsComponent(trips).getElement();
+    const events = new EventsComponent(trips).getElement();
     trips.forEach((trip) => {
       const eventList = new EventsItemComponent().getElement();
       const pointController = new PointController(
           eventList, this._modelDestinations, this._modelOffers, this._onDataChange, this._onViewChange, closeNewEventHandler
       );
       pointController.render(trip);
-      eventsElement.appendChild(eventList);
+      events.appendChild(eventList);
       this._showedEventComponents.push(pointController);
     });
-    return eventsElement;
+    return events;
   }
 
   _onCloseNewEvent(dayComponent) {
@@ -169,7 +169,9 @@ export default class TripController {
   }
 
   _onViewChange() {
-    this._showedEventComponents.forEach((it) => it.setDefaultView());
+    this._showedEventComponents.forEach((item) => {
+      item.setDefaultView();
+    });
   }
 
   _updateTrips() {

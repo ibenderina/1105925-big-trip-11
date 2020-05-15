@@ -66,4 +66,4 @@ export const LOCAL_STORE_KEYS = {
   DESTINATIONS: `destinations`
 };
 
-export const STORAGE = `bigtrip-localstorage-v2`;
+export const STORAGE = `bigtrip-localstorage-v3`;

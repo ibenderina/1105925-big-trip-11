@@ -2,7 +2,6 @@ import {remove, replace} from "@utils/render";
 import {getDigits, isEnterPressed, isEscPressed} from "@utils/common";
 import EventComponent from "@components/event/event";
 import EditComponent from "@components/edit/edit";
-import PointModel from "@models/point";
 import {EventsSortMode} from "@consts";
 
 export default class PointController {
@@ -38,10 +37,10 @@ export default class PointController {
   }
 
   render(trip) {
-    if (!this._trip) {
-      this._sourceTrip = trip;
+    if (!this._sourceTrip) {
+      this._sourceTrip = trip.clone();
     }
-    this._trip = trip;
+    this._trip = trip.clone();
     const oldEventComponent = this._eventComponent;
     const oldEditComponent = this._editComponent;
 
@@ -66,7 +65,7 @@ export default class PointController {
 
   setDefaultView() {
     if (this._mode !== EventsSortMode.DEFAULT) {
-      this._replaceTripToEvent();
+      this._rollup();
     }
   }
 
@@ -109,7 +108,7 @@ export default class PointController {
 
   _eventTypeChanger(evt) {
     const input = evt.target;
-    const newTrip = Object.assign(new PointModel(), this._trip, {
+    const newTrip = Object.assign(this._trip.clone(), this._editComponent.getData(), {
       targetType: {
         name: input.value,
         type: input.dataset[`type`]
@@ -122,7 +121,7 @@ export default class PointController {
   _destinationChanger(evt) {
     const destination = this._modelDestinations.findDestination(evt.target.value);
     if (destination) {
-      const newTrip = Object.assign(new PointModel(), this._trip, {
+      const newTrip = Object.assign(this._trip.clone(), this._editComponent.getData(), {
         destination: evt.target.value,
         info: destination
       });
@@ -162,7 +161,7 @@ export default class PointController {
     this._editComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
       return this._onDataChange(
-          null, this._trip, Object.assign(new PointModel(), this._trip, this._editComponent.getData()), true
+          null, this._trip, Object.assign(this._trip.clone(), this._editComponent.getData()), true
       ).then(() => {
         this._replaceTripToEvent();
         document.removeEventListener(`keydown`, this._onEscKeydown);

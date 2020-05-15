@@ -19,13 +19,14 @@ export default class Points {
   }
 
   setFilter(filterType) {
+    this._refreshTrips();
     this._activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
   }
 
   removeTrip(trip) {
-    const index = this._trips.findIndex((it) => {
-      return it.id === trip.id;
+    const index = this._trips.findIndex((item) => {
+      return item.id === trip.id;
     });
 
     if (index === -1) {
@@ -41,8 +42,8 @@ export default class Points {
   }
 
   updateTrip(oldTrip, trip) {
-    const index = this._trips.findIndex((it) => {
-      return it.id === oldTrip.id;
+    const index = this._trips.findIndex((item) => {
+      return item.id === oldTrip.id;
     });
 
     if (index === -1) {
@@ -61,7 +62,6 @@ export default class Points {
       return _trip.id;
     }));
     this._callHandlers(this._dataChangeHandlers);
-    this._callHandlers(this._filterChangeHandlers);
     return true;
   }
 
@@ -129,6 +129,12 @@ export default class Points {
     }, {
       min: this._trips[0].checkin,
       max: this._trips[0].checkout
+    });
+  }
+
+  _refreshTrips() {
+    this._trips = this._trips.filter((trip) => {
+      return trip.id;
     });
   }
 

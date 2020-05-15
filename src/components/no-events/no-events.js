@@ -1,5 +1,5 @@
 import AbstractComponent from "@abstract";
-import {createNoEventsTemplate} from "../no-events/no-events-tpl";
+import {createNoEventsTemplate} from "./no-events-tpl";
 
 export default class NoEvents extends AbstractComponent {
   getTemplate() {

@@ -1,5 +1,5 @@
 import AbstractComponent from "@abstract";
-import {createEventTemplate} from "../event/event-tpl";
+import {createEventTemplate} from "./event-tpl";
 
 export default class Event extends AbstractComponent {
   constructor(trip) {

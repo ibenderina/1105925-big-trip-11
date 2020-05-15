@@ -19,9 +19,9 @@ const modelPoints = new PointsModel();
 const modelDestinations = new DestinationsModel();
 const modelOffers = new OffersModel();
 
-const mainMenuElement = document.querySelector(`.trip-controls`);
-const mainMenuHeader = mainMenuElement.querySelector(`.trip-controls__header`);
-const pageBodyContainer = document.querySelector(`.page-main .page-body__container`);
+const mainMenu = document.querySelector(`.trip-controls`);
+const mainMenuHeader = mainMenu.querySelector(`.trip-controls__header`);
+const pageBody = document.querySelector(`.page-main .page-body__container`);
 
 const tripDays = new TripDaysComponent();
 
@@ -30,11 +30,11 @@ const siteMenuComponent = new MenuComponent();
 
 render(mainMenuHeader, siteMenuComponent.getElement(), RenderPosition.BEFOREBEGIN);
 
-const filterController = new FilterController(mainMenuElement, modelPoints);
+const filterController = new FilterController(mainMenu, modelPoints);
 filterController.render();
 
 const statisticsComponent = new StatsComponent(modelPoints);
-render(pageBodyContainer, statisticsComponent.getElement(), RenderPosition.BEFOREEND);
+render(pageBody, statisticsComponent.getElement(), RenderPosition.BEFOREEND);
 statisticsComponent.hide();
 
 siteMenuComponent.setOnChange((menuItem) => {

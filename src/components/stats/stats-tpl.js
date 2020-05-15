@@ -13,13 +13,13 @@ const createChartTemplate = (ctx, data, formatter, title) => {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: data.map((it) => {
-        return it[0];
+      labels: data.map((item) => {
+        return item[0];
       }),
       datasets: [{
         barThickness: 10,
-        data: data.map((it) => {
-          return it[1];
+        data: data.map((item) => {
+          return item[1];
         }),
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
